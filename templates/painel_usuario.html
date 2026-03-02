@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel de usuário - Crypta Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <header>
+        <h1>Crypta Bank</h1>
+        <div class="user-info">
+            <span>Olá, {{ nome }}</span>
+            <img src="https://via.placeholder.com/40" alt="Usuário">
+        </div>
+    </header>
+
+    <main class="container">
+
+        <section class="saldo">
+            <h2>Saldo Disponível</h2>
+
+            <p class="valor">R$ {{ saldo }}</p>
+        </section>
+
+        <section class="acoes">
+            <a href="{{ url_for('transferir') }}" class="btn">Transferir</a>
+            <a href="{{ url_for('contatar_suporte') }}" class="btn">Suporte</a>
+        </section>
+
+        <section class="transacoes">
+            <h2>Últimas Transações</h2>
+
+            {% for t in transacoes %}
+            <div class="transacao {{ 'entrada' if t.valor > 0 else 'saida' }}">
+                <span>{{ t.tipo }}</span>
+                <span>
+                    {% if t.valor > 0 %}
+                        + R$ {{ "%.2f"|format(t.valor) }}
+                    {% else %}
+                        - R$ {{ "%.2f"|format(t.valor|abs) }}
+                    {% endif %}
+                </span>
+            </div>
+            {% endfor %}
+
+
+        </section>
+
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Suporte - Crypta Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1>Crypta Bank</h1>
+    <a href="{{ url_for('painel') }}" class="voltar">← Voltar</a>
+</header>
+
+<main class="container">
+
+    <section class="card">
+        <h2>Central de Suporte</h2>
+
+        <form>
+            <label>Assunto</label>
+            <input type="text" placeholder="Ex: Problema com transferência">
+
+            <label>Categoria</label>
+            <select>
+                <option>Dúvida</option>
+                <option>Problema técnico</option>
+                <option>Pagamento</option>
+                <option>Segurança</option>
+                <option>Outro</option>
+            </select>
+
+            <label>Descreva o problema</label>
+            <textarea placeholder="Explique o que aconteceu..."></textarea>
+
+            <button type="submit" class="btn-primary">Enviar Solicitação</button>
+        </form>
+    </section>
+
+    <section class="card contato">
+        <h3>Outros Canais</h3>
+        <p>📞 Telefone: 0800 123 4567</p>
+        <p>💬 Chat 24h no aplicativo</p>
+        <p>📧 Email: suporte@cryptabank.com</p>
+    </section>
+
+</main>
+
+</body>
+</html>

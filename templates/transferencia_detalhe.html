@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhe da Transferência - Admin | Crypta Bank</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h2>Admin</h2>
+        <nav>
+            <a href="admin_dashboard.html">📊 Dashboard</a>
+            <a href="#">👥 Usuários</a>
+            <a href="admin_transferencias.html">💸 Transferências</a>
+            <a href="#">🎧 Suporte</a>
+            <a href="#">🏦 Carteiras</a>
+            <a href="admin_configuracoes.html">⚙ Configurações</a>
+        </nav>
+    </aside>
+
+    <!-- CONTEÚDO -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <h1>Detalhe da Transferência</h1>
+            <a href="admin_transferencias.html">← Voltar</a>
+        </header>
+
+        <section class="card detalhe-transferencia">
+
+            <h3>ID da Transação: #1024</h3>
+
+            <div class="status-box pendente">
+                Status: Pendente
+            </div>
+
+            <div class="grid-detalhes">
+
+                <div class="campo">
+                    <label>Usuário</label>
+                    <p>Maria Oliveira</p>
+                </div>
+
+                <div class="campo">
+                    <label>Email</label>
+                    <p>maria@email.com</p>
+                </div>
+
+                <div class="campo">
+                    <label>Tipo</label>
+                    <p class="saida">Saída</p>
+                </div>
+
+                <div class="campo">
+                    <label>Valor</label>
+                    <p class="valor-destaque">R$ 350,00</p>
+                </div>
+
+                <div class="campo">
+                    <label>Banco Destino</label>
+                    <p>Banco XPTO</p>
+                </div>
+
+                <div class="campo">
+                    <label>Chave PIX</label>
+                    <p>maria@email.com</p>
+                </div>
+
+                <div class="campo">
+                    <label>Data/Hora</label>
+                    <p>01/03/2026 - 14:32</p>
+                </div>
+
+                <div class="campo">
+                    <label>IP da Operação</label>
+                    <p>192.168.0.25</p>
+                </div>
+
+                <div class="campo full">
+                    <label>Descrição</label>
+                    <p>Pagamento referente a serviço prestado.</p>
+                </div>
+
+            </div>
+
+            <!-- AÇÕES ADMIN -->
+            <div class="acoes-admin">
+
+                <button class="btn-aprovar">Aprovar</button>
+                <button class="btn-cancelar">Cancelar</button>
+                <button class="btn-reembolsar">Reembolsar</button>
+
+            </div>
+
+        </section>
+
+        <!-- LOG DE AUDITORIA -->
+        <section class="card log-auditoria">
+            <h3>Histórico de Ações</h3>
+
+            <ul>
+                <li>01/03/2026 14:32 - Transferência criada</li>
+                <li>01/03/2026 14:35 - Em análise automática</li>
+            </ul>
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

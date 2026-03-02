@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico - Crypta Bank</title>
+    <link rel="stylesheet" href="teste.css">
+</head>
+<body>
+
+<header>
+    <h1>Crypta Bank</h1>
+    <a href="index.html" class="voltar">← Voltar</a>
+</header>
+
+<main class="container">
+
+    <section class="card">
+        <h2>Histórico de Transferências</h2>
+
+        <!-- Lista preparada para JS ou Backend -->
+        <ul id="lista-transferencias" class="lista-transferencias">
+
+            <!-- ITEM EXEMPLO -->
+            <li class="item-transferencia entrada" 
+                data-id="1"
+                data-valor="2000"
+                data-tipo="entrada">
+
+                <div class="info">
+                    <span class="nome">Depósito Recebido</span>
+                    <span class="data">01/03/2026 - 14:32</span>
+                </div>
+
+                <div class="valor">
+                    + R$ 2.000,00
+                </div>
+
+            </li>
+
+            <li class="item-transferencia saida" 
+                data-id="2"
+                data-valor="350"
+                data-tipo="saida">
+
+                <div class="info">
+                    <span class="nome">Transferência para Maria</span>
+                    <span class="data">28/02/2026 - 09:15</span>
+                </div>
+
+                <div class="valor">
+                    - R$ 350,00
+                </div>
+
+            </li>
+
+        </ul>
+    </section>
+
+</main>
+
+</body>
+</html>

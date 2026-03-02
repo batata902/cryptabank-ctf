@@ -1,0 +1,120 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f6f9;
+}
+
+/* HEADER */
+.header-admin {
+    background-color: #0d1b2a;
+    color: white;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-admin a {
+    color: white;
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+/* CONTAINER */
+.container-admin {
+    padding: 40px;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.card-admin {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.card-admin h2 {
+    margin-bottom: 20px;
+}
+
+/* LISTA */
+.lista-chamados {
+    list-style: none;
+}
+
+.chamado {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    transition: 0.2s;
+}
+
+.chamado:hover {
+    background-color: #f9fafc;
+}
+
+.chamado:last-child {
+    border-bottom: none;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.cliente {
+    font-weight: bold;
+}
+
+.assunto {
+    color: #1b263b;
+}
+
+.mensagem {
+    font-size: 14px;
+    color: #777;
+}
+
+.meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.meta button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #1b9c85;
+    color: white;
+    cursor: pointer;
+}
+
+.meta button:hover {
+    background-color: #157a6e;
+}
+
+/* STATUS COLORS */
+.aberto .status {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.andamento .status {
+    color: #f39c12;
+    font-weight: bold;
+}
+
+.resolvido .status {
+    color: #2ecc71;
+    font-weight: bold;
+}

@@ -1,0 +1,271 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f6f9;
+}
+
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 220px;
+    background-color: #0d1b2a;
+    color: white;
+    padding: 30px 20px;
+}
+
+.sidebar h2 {
+    margin-bottom: 30px;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: white;
+    padding: 8px;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.sidebar a:hover {
+    background-color: #1b263b;
+}
+
+/* MAIN */
+.main-content {
+    flex: 1;
+    padding: 40px;
+}
+
+/* TOPBAR */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.topbar a {
+    text-decoration: none;
+    color: #1b263b;
+    font-weight: bold;
+}
+
+/* CARDS */
+.cards-resumo {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 200px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.card h3 {
+    font-size: 14px;
+    margin-bottom: 10px;
+    color: #777;
+}
+
+.card p {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* USUÁRIOS */
+.usuarios-section h2 {
+    margin-bottom: 15px;
+}
+
+.buscar {
+    margin-bottom: 15px;
+    padding: 8px;
+    width: 250px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+thead {
+    background-color: #1b263b;
+    color: white;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+tbody tr {
+    border-bottom: 1px solid #eee;
+}
+
+tbody tr:hover {
+    background-color: #f9fafc;
+}
+
+button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: #1b9c85;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #157a6e;
+}
+
+/* FORM CONFIG */
+.form-config {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.form-config .card {
+    width: 100%;
+}
+
+.form-config label {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    display: block;
+}
+
+.form-config input,
+.form-config select {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+
+.btn-salvar {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background-color: #1b9c85;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    width: 250px;
+}
+
+.btn-salvar:hover {
+    background-color: #157a6e;
+}
+
+/* FILTROS */
+.filtros {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filtros input,
+.filtros select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.filtros button {
+    padding: 8px 15px;
+    background-color: #1b9c85;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* STATUS */
+.status.concluida {
+    color: #2ecc71;
+    font-weight: bold;
+}
+
+.status.pendente {
+    color: #f39c12;
+    font-weight: bold;
+}
+
+.status.cancelada {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.entrada {
+    color: #2ecc71;
+    font-weight: bold;
+}
+
+.saida {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+/* BOTÕES AÇÃO */
+.btn-detalhe {
+    background-color: #3498db;
+    margin-right: 5px;
+}
+
+.btn-cancelar {
+    background-color: #e74c3c;
+}
+
+/* Layout principal */
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar fixa */
+.sidebar {
+    width: 250px;
+    flex-shrink: 0;
+}
+
+/* Conteúdo principal */
+.main-content {
+    flex: 1; /* ocupa todo o espaço restante */
+    padding: 40px;
+}
+
+/* Cards */
+.card {
+    width: 100%;      /* ocupa toda a largura disponível */
+    max-width: 1200px; /* largura máxima confortável */
+    margin: 0 auto;   /* centraliza */
+    padding: 30px;
+}

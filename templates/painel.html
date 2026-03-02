@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel de Suporte - Crypta Bank</title>
+    <link rel="stylesheet" href="suporte_admin.css">
+</head>
+<body>
+
+<header class="header-admin">
+    <h1>Crypta Bank - Painel de Suporte</h1>
+    <div class="admin-info">
+        <span>Administrador</span>
+        <a href="index.html">Sair</a>
+    </div>
+</header>
+
+<main class="container-admin">
+
+    <section class="card-admin">
+        <h2>Chamados de Suporte</h2>
+
+        <ul class="lista-chamados" id="lista-chamados">
+
+            <!-- EXEMPLO DE CHAMADO -->
+            <li class="chamado aberto" data-id="1">
+                <div class="info">
+                    <span class="cliente">João Silva</span>
+                    <span class="assunto">Problema com transferência</span>
+                    <span class="mensagem">Minha transferência não foi concluída...</span>
+                </div>
+
+                <div class="meta">
+                    <span class="data">01/03/2026</span>
+                    <span class="status">Aberto</span>
+                    <button onclick="verChamado(1)">Ver</button>
+                </div>
+            </li>
+
+            <li class="chamado andamento" data-id="2">
+                <div class="info">
+                    <span class="cliente">Maria Oliveira</span>
+                    <span class="assunto">Dúvida sobre PIX</span>
+                    <span class="mensagem">Gostaria de saber o limite diário...</span>
+                </div>
+
+                <div class="meta">
+                    <span class="data">28/02/2026</span>
+                    <span class="status">Em andamento</span>
+                    <button onclick="verChamado(2)">Ver</button>
+                </div>
+            </li>
+
+            <li class="chamado resolvido" data-id="3">
+                <div class="info">
+                    <span class="cliente">Carlos Mendes</span>
+                    <span class="assunto">Erro no login</span>
+                    <span class="mensagem">Não estou conseguindo acessar minha conta...</span>
+                </div>
+
+                <div class="meta">
+                    <span class="data">25/02/2026</span>
+                    <span class="status">Resolvido</span>
+                    <button onclick="verChamado(3)">Ver</button>
+                </div>
+            </li>
+
+        </ul>
+    </section>
+
+</main>
+
+<script>
+function verChamado(id) {
+    window.location.href = "detalhe_chamado.html?id=" + id;
+}
+</script>
+
+</body>
+</html>

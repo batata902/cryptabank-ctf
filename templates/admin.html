@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel Admin - Crypta Bank</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <!-- MENU LATERAL -->
+    <aside class="sidebar">
+        <h2>Admin</h2>
+        <nav>
+            <a href="#">📊 Dashboard</a>
+            <a href="#">👥 Usuários</a>
+            <a href="#">💸 Transferências</a>
+            <a href="#">🎧 Suporte</a>
+            <a href="#">🏦 Carteiras</a>
+            <a href="#">⚙ Configurações</a>
+        </nav>
+    </aside>
+
+    <!-- CONTEÚDO -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <h1>Painel Administrativo</h1>
+            <a href="index.html">Sair</a>
+        </header>
+
+        <!-- RESUMO -->
+        <section class="cards-resumo">
+
+            <div class="card">
+                <h3>Total de Usuários</h3>
+                <p>1.245</p>
+            </div>
+
+            <div class="card">
+                <h3>Total em Contas</h3>
+                <p>R$ 5.430.000</p>
+            </div>
+
+            <div class="card">
+                <h3>Transferências Hoje</h3>
+                <p>342</p>
+            </div>
+
+            <div class="card">
+                <h3>Chamados Abertos</h3>
+                <p>18</p>
+            </div>
+
+        </section>
+
+        <!-- LISTA DE USUÁRIOS -->
+        <section class="usuarios-section">
+
+            <h2>Usuários</h2>
+
+            <input type="text" placeholder="Buscar usuário..." class="buscar">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Saldo</th>
+                        <th>Transferências</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <!-- EXEMPLO -->
+                    <tr>
+                        <td>1</td>
+                        <td>João Silva</td>
+                        <td>joao@email.com</td>
+                        <td>R$ 12.450,00</td>
+                        <td>24</td>
+                        <td>
+                            <button>Ver Conta</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>2</td>
+                        <td>Maria Oliveira</td>
+                        <td>maria@email.com</td>
+                        <td>R$ 8.920,00</td>
+                        <td>15</td>
+                        <td>
+                            <button>Ver Conta</button>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>

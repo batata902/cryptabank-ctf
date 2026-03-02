@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastro - Crypta Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+<body>
+
+<div class="auth-container">
+
+    <div class="auth-box">
+        <h1>Crypta Bank</h1>
+        <h2>Criar nova conta</h2>
+
+        <form method="POST" action="/cadastro">
+
+            <label>Nome Completo</label>
+            <input type="text" name="nome" placeholder="Digite seu nome completo" required>
+
+            <label>Email</label>
+            <input type="email" name="email" placeholder="Digite seu email" required>
+
+            <label>Senha</label>
+            <input type="password" name="senha" placeholder="Crie uma senha" required>
+
+            <label>Confirmar Senha</label>
+            <input type="password" name="confirmar_senha" placeholder="Confirme sua senha" required>
+
+            <button type="submit" class="btn-auth">Criar Conta</button>
+        </form>
+
+        <p class="auth-link">
+            Já possui conta? <a href="{{ url_for('login') }}">Entrar</a>
+        </p>
+    </div>
+
+</div>
+
+</body>
+</html>

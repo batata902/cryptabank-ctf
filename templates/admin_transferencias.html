@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Transferências - Admin | Crypta Bank</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <h2>Admin</h2>
+        <nav>
+            <a href="admin_dashboard.html">📊 Dashboard</a>
+            <a href="#">👥 Usuários</a>
+            <a href="admin_transferencias.html">💸 Transferências</a>
+            <a href="#">🎧 Suporte</a>
+            <a href="#">🏦 Carteiras</a>
+            <a href="admin_configuracoes.html">⚙ Configurações</a>
+        </nav>
+    </aside>
+
+    <!-- CONTEÚDO -->
+    <main class="main-content">
+
+        <header class="topbar">
+            <h1>Gerenciar Transferências</h1>
+            <a href="index.html">Sair</a>
+        </header>
+
+        <!-- FILTROS -->
+        <section class="filtros">
+
+            <input type="text" placeholder="Buscar por ID ou usuário...">
+
+            <select>
+                <option value="">Todos os Status</option>
+                <option value="concluida">Concluída</option>
+                <option value="pendente">Pendente</option>
+                <option value="cancelada">Cancelada</option>
+            </select>
+
+            <select>
+                <option value="">Tipo</option>
+                <option value="entrada">Entrada</option>
+                <option value="saida">Saída</option>
+            </select>
+
+            <button>Filtrar</button>
+
+        </section>
+
+        <!-- TABELA -->
+        <section class="tabela-transferencias">
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuário</th>
+                        <th>Tipo</th>
+                        <th>Valor</th>
+                        <th>Status</th>
+                        <th>Data</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <!-- EXEMPLO -->
+                    <tr>
+                        <td>#1023</td>
+                        <td>João Silva</td>
+                        <td class="entrada">Entrada</td>
+                        <td>R$ 2.000,00</td>
+                        <td class="status concluida">Concluída</td>
+                        <td>01/03/2026</td>
+                        <td>
+                            <button class="btn-detalhe">Ver</button>
+                            <button class="btn-cancelar">Cancelar</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>#1024</td>
+                        <td>Maria Oliveira</td>
+                        <td class="saida">Saída</td>
+                        <td>R$ 350,00</td>
+                        <td class="status pendente">Pendente</td>
+                        <td>01/03/2026</td>
+                        <td>
+                            <button class="btn-detalhe">Ver</button>
+                            <button class="btn-cancelar">Cancelar</button>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+
+</body>
+</html>
