@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Painel de usuário - Crypta Bank</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
 
     <header>
@@ -36,17 +38,17 @@
                 <span>{{ t.tipo }}</span>
                 <span>
                     {% if t.valor > 0 %}
-                        + R$ {{ "%.2f"|format(t.valor) }}
+                    + R$ {{ "%.2f"|format(t.valor) }}
                     {% else %}
-                        - R$ {{ "%.2f"|format(t.valor|abs) }}
+                    - R$ {{ "%.2f"|format(t.valor|abs) }}
                     {% endif %}
                 </span>
             </div>
             {% endfor %}
 
         </section>
-        <form action="{{ url_for('logout') }}", method="get" class="logout">
-                <input type="submit" value="Sair">
+        <form action="{{ url_for('logout') }}" , method="get" class="logout">
+            <input type="submit" value="Sair">
         </form>
 
     </main>
@@ -54,4 +56,5 @@
     <script src="{{ url_for('static', filename='index.js') }}"></script>
 
 </body>
+
 </html>

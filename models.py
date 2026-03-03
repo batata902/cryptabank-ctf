@@ -15,14 +15,12 @@ class Model:
 
     def is_auth(self, cookie):
         consulta = self.cur.execute('SELECT cookie FROM users_cookies WHERE cookie=?;', (cookie,)).fetchone()
-        print(consulta)
         if consulta:
             return True
         return False
     
     def get_cookie(self, email):
         cookie = self.cur.execute('SELECT cookie FROM users_cookies WHERE email=?', (email,)).fetchone()
-        print(cookie)
         return cookie['cookie']
 
 

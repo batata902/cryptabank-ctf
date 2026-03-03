@@ -107,6 +107,12 @@ def transferir():
         return redirect(url_for('login'))
     return render_template('painel_user/transferir.html')
 
+@app.route('/painel/realiza-transferencia', methods=['POST'])
+def transferencia():
+    dados_transferencia = request.form.to_dict()
+    print(dados_transferencia)
+    return dados_transferencia
+
 
 @app.route('/contatar-suporte')
 def contatar_suporte():

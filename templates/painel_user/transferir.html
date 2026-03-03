@@ -1,38 +1,43 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Transferência - Crypta Bank</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
 
-<header>
-    <h1>Crypta Bank</h1>
-    <a href="{{ url_for('painel') }}" class="voltar">← Voltar</a>
-</header>
+    <header>
+        <h1 class="logo" data-url="{{ url_for('homepage') }}">Crypta Bank</h1>
+        <a href="{{ url_for('painel') }}" class="voltar">← Voltar</a>
+    </header>
 
-<main class="container">
+    <main class="container">
 
-    <section class="card">
-        <h2>Nova Transferência</h2>
+        <section class="card">
+            <h2>Nova Transferência</h2>
 
-        <form action="/transfer", method="POST">
+            <form action="{{ url_for('transferencia') }}" method="POST">
 
-            <label>CPF / Chave PIX</label>
-            <input type="text" placeholder="Digite o CPF ou chave PIX">
+                <label>CPF / Chave PIX</label>
+                <input type="text" placeholder="Digite o CPF ou chave PIX" name="destino">
 
-            <label>Valor</label>
-            <input type="number" placeholder="R$ 0,00">
+                <label>Valor</label>
+                <input type="number" placeholder="R$ 0,00" name="valor">
 
-            <label>Descrição (opcional)</label>
-            <textarea placeholder="Descrição da transferência"></textarea>
+                <label>Descrição (opcional)</label>
+                <textarea placeholder="Descrição da transferência" name="desc"></textarea>
 
-            <button type="submit" class="btn-primary">Confirmar Transferência</button>
-        </form>
-    </section>
+                <button type="submit" class="btn-primary">Confirmar Transferência</button>
+            </form>
+        </section>
 
-</main>
+    </main>
+
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
 
 </body>
+
 </html>
