@@ -324,6 +324,7 @@ form textarea {
 
 .logo {
     color: white;
+    cursor: pointer;
 }
 
 .nav-home {
@@ -385,6 +386,35 @@ form textarea {
     margin: auto;
 }
 
+.secao.img {
+    background-image: url('../imagens/emprestimos.jpeg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 40px;
+    background-size: cover;
+    height: 400px;
+    width: 100%;
+}
+
+/* Balão */
+.balão {
+    background: rgba(0, 0, 0, 0.7); /* preto transparente */
+    color: white;
+    padding: 25px;
+    max-width: 400px;
+    border-radius: 12px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    backdrop-filter: blur(5px); /* efeito vidro (opcional e moderno) */
+}
+
+.balão h2 {
+    margin-top: 0;
+}
+
 .fundo-claro {
     background-color: #f4f6f9;
 }
@@ -404,6 +434,14 @@ form textarea {
     border-radius: 10px;
     width: 250px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: box-shadow 0.5s ease;
+}
+
+.card-beneficio.mouse-over {
+    cursor: pointer;
+    transform: scale(1.30);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.245);
+    transition: transform 0.7s ease;
 }
 
 /* ===== FOOTER ===== */

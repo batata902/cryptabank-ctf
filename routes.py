@@ -13,9 +13,14 @@ def isauth(cookie):
 @app.route('/')
 def homepage():
     autenticado = isauth(request.cookies.get('auth_token'))
-    print(autenticado)
 
     return render_template('index.html', autenticado=autenticado)
+
+@app.route('/seguranca')
+def seguranca():
+    autenticado = isauth(request.cookies.get('auth_token'))
+    return render_template('seguranca.html', autenticado=autenticado)
+
 
 @app.route('/emprestimos')
 def emprestimos():
@@ -29,7 +34,7 @@ def login():
     if not erro:
          erro = ''
     if isauth(request.cookies.get('auth_token')):
-            return redirect('/dashboard')
+            return redirect(url_for('painel'))
     return render_template('login.html', endpoint='verifica_login', erro=erro)
 
 
@@ -41,10 +46,7 @@ def verifica_login():
     if not auth:
          return redirect(url_for('login', erro='Email ou senha incorretos.'))
     
-    #cookie_value = database.get_cookie(infos['email'])
-
-    cookie_value = Utils.uuid(True)
-    database.save_cookie(cookie_value, infos['email'])
+    cookie_value = database.get_cookie(infos['email'])
 
     response = make_response(redirect(url_for('painel')))
     response.set_cookie('auth_token', cookie_value) 
@@ -115,7 +117,7 @@ def contatar_suporte():
 
 @app.route('/logout')
 def logout():
-    token = request.cookies.get('auth_token')
-    database.delete_cookie(token)
+    response = make_response(redirect(url_for('homepage')))
+    response.set_cookie('auth_token', '', max_age=0)
 
-    return redirect(url_for('homepage'))
+    return response

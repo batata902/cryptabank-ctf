@@ -107,3 +107,14 @@ input:focus {
         padding: 25px;
     }
 }
+
+.voltar {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.voltar:hover {
+    text-decoration: underline;
+}

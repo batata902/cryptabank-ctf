@@ -1,73 +1,88 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Crypta Bank - Seu Banco Digital</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
 
-<header class="header-home">
-    <h1 class="logo">Crypta Bank</h1>
+    <header class="header-home">
+        <h1 class="logo">Crypta Bank</h1>
 
-    <nav class="nav-home">
-        <a href="#sobre">Sobre Nós</a>
-        <a href="#beneficios">Benefícios</a>
+        <nav class="nav-home">
+            <a href="#sobre">Sobre Nós</a>
+            <a href="#beneficios">Benefícios</a>
 
-        {% if not autenticado %}
+            {% if not autenticado %}
 
-        <a href="{{ url_for('login') }}" class="btn-login">Login</a>
-        <a href="{{ url_for('cadastro') }}" class="btn-cadastro">Criar Conta</a>
+            <a href="{{ url_for('login') }}" class="btn-login">Login</a>
+            <a href="{{ url_for('cadastro') }}" class="btn-cadastro">Criar Conta</a>
 
-        {% else %}
+            {% else %}
 
-        <a href="{{ url_for('painel') }}" class="btn-login">Painel de Controle</a>
+            <a href="{{ url_for('painel') }}" class="btn-login">Painel de Controle</a>
 
-        {% endif %}
-    </nav>
-</header>
+            {% endif %}
+        </nav>
+    </header>
 
-<section class="hero">
-    <div class="hero-content">
-        <h2>O banco digital que simplifica sua vida</h2>
-        <p>Transferências rápidas, segurança máxima e controle total do seu dinheiro.</p>
-        <a href="{{ url_for('cadastro') }}" class="btn-principal">Abra sua conta grátis</a>
-    </div>
-</section>
-
-<section id="sobre" class="secao">
-    <h2>Sobre Nós</h2>
-    <p>
-        O Crypta Bank nasceu com a missão de trazer tecnologia, segurança e 
-        praticidade para o mundo financeiro. Somos 100% digitais e focados 
-        em inovação.
-    </p>
-</section>
-
-<section id="beneficios" class="secao fundo-claro">
-    <h2>Por que escolher o Crypta Bank?</h2>
-
-    <div class="cards-beneficios">
-        <div class="card-beneficio">
-            <h3>🔒 Segurança</h3>
-            <p>Proteção avançada com criptografia de ponta.</p>
+    <section class="hero">
+        <div class="hero-content">
+            <h2>O banco digital que simplifica sua vida</h2>
+            <p>Transferências rápidas, segurança máxima e controle total do seu dinheiro.</p>
+            <a href="{{ url_for('cadastro') }}" class="btn-principal">Abra sua conta grátis</a>
         </div>
+    </section>
 
-        <div class="card-beneficio">
-            <h3>⚡ Transferências Instantâneas</h3>
-            <p>PIX e TED rápidos e sem complicação.</p>
+    <section id="sobre" class="secao">
+        <h2>Sobre Nós</h2>
+        <p>
+            O Crypta Bank nasceu com a missão de trazer tecnologia, segurança e
+            praticidade para o mundo financeiro. Somos 100% digitais e focados
+            em inovação.
+        </p>
+    </section>
+
+    <section class="secao img">
+        <div class="balão">
+            <h2>Nossa experiência fala por nós!</h2>
+            <p>
+                Estamos no mercado a mais de 590 anos, sempre oferecendo os melhores emprestimos e maiores juros aos
+                nossos clientes! Junte-se a nós e venda até a sua alma para nos pagar!
+            </p>
         </div>
+    </section>
 
-        <div class="card-beneficio">
-            <h3>📱 100% Digital</h3>
-            <p>Controle total pelo app ou navegador.</p>
+    <section id="beneficios" class="secao fundo-claro">
+        <h2>Por que escolher o Crypta Bank?</h2>
+
+        <div class="cards-beneficios">
+            <div class="card-beneficio seguranca">
+                <h3>🔒 Segurança</h3>
+                <p>Proteção avançada com criptografia de ponta.</p>
+            </div>
+
+            <div class="card-beneficio transferencia">
+                <h3>⚡ Transferências Instantâneas</h3>
+                <p>PIX e TED rápidos e sem complicação.</p>
+            </div>
+
+            <div class="card-beneficio digital">
+                <h3>📱 100% Digital</h3>
+                <p>Controle total pelo app ou navegador.</p>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<footer class="footer">
-    <p>© 2026 Crypta Bank - Todos os direitos reservados</p>
-</footer>
+    <footer class="footer">
+        <p>© 2026 Crypta Bank - Todos os direitos reservados</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
 
 </body>
+
 </html>
