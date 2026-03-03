@@ -9,24 +9,32 @@ database = Model()
 def isauth(cookie):
     return database.is_auth(cookie)
 
+# LANDING PAGE
 
 @app.route('/')
 def homepage():
     autenticado = isauth(request.cookies.get('auth_token'))
 
-    return render_template('index.html', autenticado=autenticado)
+    return render_template('landing/index.html', autenticado=autenticado)
 
 @app.route('/seguranca')
 def seguranca():
     autenticado = isauth(request.cookies.get('auth_token'))
-    return render_template('seguranca.html', autenticado=autenticado)
+    return render_template('landing/seguranca.html', autenticado=autenticado)
 
-
-@app.route('/emprestimos')
-def emprestimos():
+@app.route('/pix-ted')
+def pix_ted():
     autenticado = isauth(request.cookies.get('auth_token'))
+    return render_template('landing/transferências_inst.html', autenticado=autenticado)
 
-    return render_template('emprestimos.html', autenticado=autenticado)
+@app.route('/digital')
+def digital():
+    autenticado = isauth(request.cookies.get('auth_token'))
+    return render_template('landing/digital.html', autenticado=autenticado)
+
+# FIM LANDING PAGE
+
+# INICIO AUTENTICAÇÃO
 
 @app.route('/login')
 def login():
@@ -35,7 +43,7 @@ def login():
          erro = ''
     if isauth(request.cookies.get('auth_token')):
             return redirect(url_for('painel'))
-    return render_template('login.html', endpoint='verifica_login', erro=erro)
+    return render_template('auth/login.html', endpoint='verifica_login', erro=erro)
 
 
 @app.route('/verifica_login', methods=['POST'])
@@ -60,7 +68,7 @@ def cadastro():
          erro = ''
     if isauth(request.cookies.get('auth_token')):
             return redirect(url_for('homepage'))
-    return render_template('cadastro.html', erro=erro)
+    return render_template('auth/cadastro.html', erro=erro)
 
 
 @app.route('/cadastrar_user', methods=['POST'])
@@ -79,6 +87,11 @@ def verifica_cad():
     
     return redirect(url_for('login'))
     
+# FIM AUTENTICAÇÃO
+
+
+# INICIO PAINEL DE USUARIO
+
 @app.route('/painel')
 def painel():
     token = request.cookies.get('auth_token')
@@ -86,34 +99,21 @@ def painel():
             return redirect(url_for('login'))
     user_infos = database.get_user_infos(token)
     print(float(user_infos['currency']) / 100)
-    return render_template('painel_usuario.html', saldo=user_infos['currency'], nome=user_infos['nome'])
+    return render_template('painel_user/painel_usuario.html', saldo=user_infos['currency'], nome=user_infos['nome'])
 
 @app.route('/painel/transferir')
 def transferir():
-    #if not isauth(request.cookies.get('auth_token')):
-    #    return redirect(url_for('login'))
-    return render_template('transferir.html')
+    if not isauth(request.cookies.get('auth_token')):
+        return redirect(url_for('login'))
+    return render_template('painel_user/transferir.html')
 
-
-@app.route('/painel/suporte')
-def slogin():
-    #if not isauth(request.cookies.get('auth_token')):
-    #    return redirect(url_for('login'))
-    return render_template('login.html', endpoint='/suporte-auth')
 
 @app.route('/contatar-suporte')
 def contatar_suporte():
-    #if not isauth(request.cookies.get('auth_token')):
-    #    return redirect(url_for('login'))
-    return render_template('suporte.html')
+    if not isauth(request.cookies.get('auth_token')):
+        return redirect(url_for('login'))
+    return render_template('painel_user/suporte.html')
 
-# @app.route('/painel/')
-# def extrato():
-#     None
-
-# @app.route('/painel/')
-# def investimentos():
-#     None
 
 @app.route('/logout')
 def logout():
@@ -121,3 +121,5 @@ def logout():
     response.set_cookie('auth_token', '', max_age=0)
 
     return response
+
+# FIM PAINEL DE USUARIO

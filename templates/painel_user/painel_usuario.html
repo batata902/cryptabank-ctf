@@ -8,7 +8,7 @@
 <body>
 
     <header>
-        <h1>Crypta Bank</h1>
+        <h1 class="logo" data-url="{{ url_for('homepage') }}">Crypta Bank</h1>
         <div class="user-info">
             <span>Olá, {{ nome }}</span>
             <img src="{{ url_for('static', filename='imagens/user.png') }}" alt="Usuário">
@@ -50,6 +50,8 @@
         </form>
 
     </main>
+
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
 
 </body>
 </html>

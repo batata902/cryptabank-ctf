@@ -345,10 +345,21 @@ form textarea {
     border-radius: 6px;
 }
 
+.btn-login:hover {
+    background-color: white;
+    border-color: #0d1b2a;
+    color: #0d1b2a;
+}
+
 .btn-cadastro {
     padding: 8px 15px;
     background-color: #1b9c85;
     border-radius: 6px;
+}
+
+.btn-cadastro:hover {
+    color: #1b9c85;
+    background-color: white;
 }
 
 /* ===== HERO ===== */
@@ -438,7 +449,6 @@ form textarea {
 }
 
 .card-beneficio.mouse-over {
-    cursor: pointer;
     transform: scale(1.30);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.245);
     transition: transform 0.7s ease;

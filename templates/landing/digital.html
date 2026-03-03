@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>100% Digital - Crypta Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+<header class="header-home">
+        <h1 class="logo" data-url="{{ url_for('homepage') }}">Crypta Bank</h1>
+
+        <nav class="nav-home">
+            <a href="#sobre">Sobre Nós</a>
+            <a href="#beneficios">Benefícios</a>
+
+            {% if not autenticado %}
+
+            <a href="{{ url_for('login') }}" class="btn-login">Login</a>
+            <a href="{{ url_for('cadastro') }}" class="btn-cadastro">Criar Conta</a>
+
+            {% else %}
+
+            <a href="{{ url_for('painel') }}" class="btn-login">Painel de Controle</a>
+
+            {% endif %}
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Banco 100% Digital</h2>
+            <p>
+                Tenha controle total da sua conta diretamente pelo navegador,
+                com praticidade, autonomia e tecnologia de ponta.
+            </p>
+        </div>
+    </section>
+
+    <section class="secao">
+        <h2>Como funciona nossa experiência digital</h2>
+        <p>
+            O Crypta Bank foi desenvolvido para oferecer uma experiência
+            totalmente online, permitindo que você gerencie sua conta
+            de forma simples, rápida e intuitiva.
+        </p>
+
+        <div class="cards-beneficios">
+
+            <div class="card-beneficio">
+                <h3>📱 100% Digital</h3>
+                <p>
+                    Controle total pelo navegador.
+                </p>
+            </div>
+
+            <div class="card-beneficio">
+                <h3>💻 Acesso de Qualquer Lugar</h3>
+                <p>
+                    Gerencie sua conta onde estiver, utilizando apenas
+                    conexão com a internet.
+                </p>
+            </div>
+
+            <div class="card-beneficio">
+                <h3>⚙️ Interface Intuitiva</h3>
+                <p>
+                    Plataforma simples e organizada para facilitar
+                    todas as suas operações financeiras.
+                </p>
+            </div>
+
+            <div class="card-beneficio">
+                <h3>🚀 Agilidade nas Operações</h3>
+                <p>
+                    Realize pagamentos, transferências e consultas
+                    com rapidez e eficiência.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="secao fundo-claro">
+        <h2>Tecnologia que Facilita sua Vida</h2>
+        <p>
+            Nosso compromisso é oferecer uma experiência moderna,
+            prática e totalmente digital para você ter liberdade
+            no controle das suas finanças.
+        </p>
+    </section>
+
+    <footer class="footer">
+        <p>© 2026 Crypta Bank - Todos os direitos reservados</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+
+</body>
+</html>
