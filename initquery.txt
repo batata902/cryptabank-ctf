@@ -1,0 +1,55 @@
+// USUARIOS
+
+CREATE TABLE IF NOT EXISTS users(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT,
+    cpf TEXT,
+    email TEXT UNIQUE,
+    senha TEXT,
+    conta_id TEXT UNIQUE,
+    created_at TEXT,
+    currency INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS admins(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nick TEXT,
+    email TEXT UNIQUE,
+    senha TEXT
+);
+
+CREATE TABLE IF NOT EXISTS users_cookies(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT UNIQUE,
+    cookie TEXT
+);
+
+CREATE TABLE IF NOT EXISTS admin_cookies(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    cookie TEXT
+);
+
+CREATE TABLE IF NOT EXISTS transfer_history(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    source_wallet TEXT,
+    destiny_wallet TEXT,
+    value TEXT,
+    date TEXT
+);
+
+
+
+// BANCO
+
+
+CREATE TABLE IF NOT EXISTS cryptabank(
+    id INTEGER PRIMARY KEY,
+    account TEXT UNIQUE,
+    currency INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS transactions(
+    id INTEGER PRIMARY KEY,
+    quantity INTEGER,
+    transaction_status TEXT
+)

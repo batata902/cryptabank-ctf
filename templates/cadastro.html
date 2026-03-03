@@ -13,10 +13,13 @@
         <h1>Crypta Bank</h1>
         <h2>Criar nova conta</h2>
 
-        <form method="POST" action="/cadastro">
+        <form method="POST" action="{{ url_for('verifica_cad') }}">
 
             <label>Nome Completo</label>
             <input type="text" name="nome" placeholder="Digite seu nome completo" required>
+
+            <label>Cpf</label>
+            <input type="text" name="cpf" placeholder="Digite seu cpf" required>
 
             <label>Email</label>
             <input type="email" name="email" placeholder="Digite seu email" required>
@@ -29,6 +32,8 @@
 
             <button type="submit" class="btn-auth">Criar Conta</button>
         </form>
+
+        <p class="erro">{{ erro }}</p>
 
         <p class="auth-link">
             Já possui conta? <a href="{{ url_for('login') }}">Entrar</a>

@@ -95,6 +95,12 @@ input:focus {
     text-decoration: underline;
 }
 
+.erro {
+    color: red;
+    text-align: center;
+    padding-top: 20px;
+}
+
 /* RESPONSIVO */
 @media (max-width: 500px) {
     .auth-box {

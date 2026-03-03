@@ -1,15 +1,19 @@
 from cryptabank import app
 from flask import render_template, make_response, request, redirect, url_for
+from cryptabank.core.utils import Utils
+from cryptabank.models import Model
 
 auth_users = []
+database = Model()
 
 def isauth(cookie):
-    return cookie in auth_users
+    return database.is_auth(cookie)
 
 
 @app.route('/')
 def homepage():
     autenticado = isauth(request.cookies.get('auth_token'))
+    print(autenticado)
 
     return render_template('index.html', autenticado=autenticado)
 
@@ -21,22 +25,59 @@ def emprestimos():
 
 @app.route('/login')
 def login():
+    erro = request.args.get('erro')
+    if not erro:
+         erro = ''
     if isauth(request.cookies.get('auth_token')):
             return redirect('/dashboard')
-    return render_template('login.html')
+    return render_template('login.html', endpoint='verifica_login', erro=erro)
+
+
+@app.route('/verifica_login', methods=['POST'])
+def verifica_login():
+    infos = request.form.to_dict()
+    auth = database.login(infos)
+
+    if not auth:
+         return redirect(url_for('login', erro='Email ou senha incorretos.'))
+    
+    cookie_value = database.get_cookie(infos['email'])
+
+    response = make_response(redirect(url_for('painel')))
+    response.set_cookie('auth_token', cookie_value) 
+    return response
 
 
 @app.route('/cadastro')
 def cadastro():
+    erro = request.args.get('erro')
+    if erro == None:
+         erro = ''
     if isauth(request.cookies.get('auth_token')):
             return redirect(url_for('homepage'))
-    return render_template('cadastro.html')
+    return render_template('cadastro.html', erro=erro)
 
 
+@app.route('/cadastrar_user', methods=['POST'])
+def verifica_cad():
+    infos = request.form.to_dict()
+
+    if infos['confirmar_senha'] != infos['senha']:
+        return redirect(url_for('cadastro', erro='Email já existe ou houve algum problema na criação da conta'))
+    
+    auth = database.cadastrar(infos)
+    cookie_value = Utils.uuid(True)
+    database.save_cookie(cookie_value, infos['email'])
+
+    if not auth:
+         return redirect(url_for('cadastro.html', erro='Erro no Cadastro, verifique as informações e tente novamente.'))
+    
+    return redirect(url_for('login'))
+    
 @app.route('/painel')
 def painel():
-    #if not isauth(request.cookies.get('auth_token')):
-    #        return redirect(url_for('login'))
+    if not isauth(request.cookies.get('auth_token')):
+            return redirect(url_for('login'))
     return render_template('painel_usuario.html', saldo='0,00')
 
 @app.route('/painel/transferir')

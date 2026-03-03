@@ -1,39 +1,60 @@
 import sqlite3
-from flask import Flask, jsonify, request
-from core.utils import Utils
+from cryptabank.core.utils import Utils
 
 # CRUD -> CREATE, READ, UPDATE, DELETE
-app = Flask(__name__)
 
-conn = sqlite3.connect('database.db', check_same_thread=False)
-conn.row_factory = sqlite3.Row
-cur = conn.cursor()
+class Model:
 
-cur.executescript(open('init.sql', 'r').read())
+    def __init__(self):
+        self.conn = sqlite3.connect('database.db', check_same_thread=False)
+        self.conn.row_factory = sqlite3.Row
+        self.cur = self.conn.cursor()
 
-@app.route('/cadastro', methods=["POST"])
-def cadastrar():
-    infos = request.get_json()
+        self.cur.executescript(open('init.sql', 'r').read())
+
+
+    def is_auth(self, cookie):
+        consulta = self.cur.execute('SELECT cookie FROM users_cookies WHERE cookie=?;', (cookie,)).fetchone()
+        print(consulta)
+        if consulta:
+            return True
+        return False
     
-    account_id = Utils.uuid()
-    data_atual = Utils.get_local_date()
-
-    conn.execute('INSERT INTO users(nome, cpf, email, senha, conta_id, created_at, currency) VALUES(?, ?, ?, ?, ?, ?, ?, ?)', (infos['nome'], infos['cpf'], infos['email'], infos['senha'], account_id, data_atual, 0));
-    conn.commit()
-    return jsonify({'status': 'ok'})
-
-@app.route('/login', methods=["POST"])
-def login():
-    None
+    def get_cookie(self, email):
+        cookie = self.cur.execute('SELECT cookie FROM users_cookies WHERE email=?', (email,)).fetchone()
+        print(cookie)
+        return cookie['cookie']
 
 
-def delete():
-    None
+    def save_cookie(self, cookie, email):
+        self.conn.execute('INSERT INTO users_cookies(cookie, email) VALUES (?, ?);', (cookie, email))
+        self.conn.commit()
 
 
-def update():
-    None
+    def cadastrar(self, infos):
+        account_id = Utils.uuid()
+        data_atual = Utils.get_local_date()
+
+        try:
+            self.conn.execute('INSERT INTO users(nome, cpf, email, senha, conta_id, created_at, currency) VALUES(?, ?, ?, ?, ?, ?, ?)', (infos['nome'], infos['cpf'], infos['email'], infos['senha'], account_id, data_atual, 0));
+            self.conn.commit()
+        except KeyError:
+            return False
+        return True
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    def login(self, infos):
+        consulta = self.cur.execute('SELECT email, senha FROM users WHERE email = ? AND senha = ?', (infos['email'], infos['senha'])).fetchone()
+
+        if consulta:
+            return True
+        return False
+
+
+    def delete():
+        None
+
+
+    def update():
+        None
+

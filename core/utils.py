@@ -4,7 +4,9 @@ import datetime
 
 class Utils:
     @classmethod
-    def uuid(cls):
+    def uuid(cls, h=False):
+        if h:
+            return uuid.uuid4().hex
         return str(uuid.uuid4())
     
     @classmethod
