@@ -11,7 +11,7 @@
         <h1>Crypta Bank</h1>
         <div class="user-info">
             <span>Olá, {{ nome }}</span>
-            <img src="https://via.placeholder.com/40" alt="Usuário">
+            <img src="{{ url_for('static', filename='imagens/user.png') }}" alt="Usuário">
         </div>
     </header>
 
@@ -20,7 +20,7 @@
         <section class="saldo">
             <h2>Saldo Disponível</h2>
 
-            <p class="valor">R$ {{ saldo }}</p>
+            <p class="valor">R$ {{ "%.2f"|format(saldo)|replace('.', ',') }}</p>
         </section>
 
         <section class="acoes">

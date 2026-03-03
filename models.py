@@ -30,6 +30,15 @@ class Model:
         self.conn.execute('INSERT INTO users_cookies(cookie, email) VALUES (?, ?);', (cookie, email))
         self.conn.commit()
 
+    def email_cookie(self, cookie):
+        consulta = self.cur.execute('SELECT email FROM users_cookies WHERE cookie=?', (cookie,)).fetchone()
+        return consulta['email']
+
+    def get_user_infos(self, token):
+        email = self.email_cookie(token)
+        consulta = self.cur.execute('SELECT nome, currency FROM users WHERE email=?', (email,)).fetchone()
+        return dict(consulta)
+
 
     def cadastrar(self, infos):
         account_id = Utils.uuid()

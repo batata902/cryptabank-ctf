@@ -76,9 +76,12 @@ def verifica_cad():
     
 @app.route('/painel')
 def painel():
-    if not isauth(request.cookies.get('auth_token')):
+    token = request.cookies.get('auth_token')
+    if not isauth(token):
             return redirect(url_for('login'))
-    return render_template('painel_usuario.html', saldo='0,00')
+    user_infos = database.get_user_infos(token)
+    print(float(user_infos['currency']) / 100)
+    return render_template('painel_usuario.html', saldo=user_infos['currency'], nome=user_infos['nome'])
 
 @app.route('/painel/transferir')
 def transferir():
