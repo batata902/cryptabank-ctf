@@ -44,8 +44,10 @@
             </div>
             {% endfor %}
 
-
         </section>
+        <form action="{{ url_for('logout') }}", method="get" class="logout">
+                <input type="submit" value="Sair">
+        </form>
 
     </main>
 

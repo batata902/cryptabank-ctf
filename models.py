@@ -30,6 +30,10 @@ class Model:
         self.conn.execute('INSERT INTO users_cookies(cookie, email) VALUES (?, ?);', (cookie, email))
         self.conn.commit()
 
+    def delete_cookie(self, token):
+        self.conn.execute('DELETE FROM users_cookies WHERE cookie=?', (token,))
+        self.conn.commit()
+
     def email_cookie(self, cookie):
         consulta = self.cur.execute('SELECT email FROM users_cookies WHERE cookie=?', (cookie,)).fetchone()
         return consulta['email']

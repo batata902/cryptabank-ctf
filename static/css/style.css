@@ -96,6 +96,7 @@ header h1 {
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
 }
 
 .transacoes h2 {
@@ -115,6 +116,26 @@ header h1 {
 
 .entrada {
     color: green;
+}
+
+.logout {
+    margin-top: 30px;
+    margin: auto;
+    min-width: 150px;
+    max-width: 300px;
+}
+
+.logout > input {
+    background-color: rgb(64, 2, 2);
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout > input:hover {
+    background-color: rgb(115, 17, 17);
+    transition: background-color 0.3s ease;
 }
 
 .saida {

@@ -41,7 +41,10 @@ def verifica_login():
     if not auth:
          return redirect(url_for('login', erro='Email ou senha incorretos.'))
     
-    cookie_value = database.get_cookie(infos['email'])
+    #cookie_value = database.get_cookie(infos['email'])
+
+    cookie_value = Utils.uuid(True)
+    database.save_cookie(cookie_value, infos['email'])
 
     response = make_response(redirect(url_for('painel')))
     response.set_cookie('auth_token', cookie_value) 
@@ -110,9 +113,9 @@ def contatar_suporte():
 # def investimentos():
 #     None
 
+@app.route('/logout')
+def logout():
+    token = request.cookies.get('auth_token')
+    database.delete_cookie(token)
 
-@app.route('/cookie')
-def getcookie():
-    response = make_response('Cookie obtido')
-    response.set_cookie('auth_token', 'abc123')
-    return response
+    return redirect(url_for('homepage'))
