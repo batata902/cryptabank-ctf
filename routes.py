@@ -101,18 +101,6 @@ def painel():
     print(float(user_infos['currency']) / 100)
     return render_template('painel_user/painel_usuario.html', saldo=user_infos['currency'], nome=user_infos['nome'])
 
-@app.route('/painel/transferir')
-def transferir():
-    if not isauth(request.cookies.get('auth_token')):
-        return redirect(url_for('login'))
-    return render_template('painel_user/transferir.html')
-
-@app.route('/painel/realiza-transferencia', methods=['POST'])
-def transferencia():
-    dados_transferencia = request.form.to_dict()
-    print(dados_transferencia)
-    return dados_transferencia
-
 
 @app.route('/painel/contatar-suporte', methods=['GET'])
 def contatar_suporte():
@@ -125,14 +113,17 @@ def contatar_suporte():
 @app.route('/painel/contatar-suporte/enviar', methods=['POST'])
 def enviar_suporte():
     mensagem = request.form.to_dict()
-    if not isauth(request.cookies.get('auth_token')):
+    token = request.cookies.get('auth_token')
+    if not isauth(token):
          return redirect(url_for('login'))
-    database.registrar_mensagem(mensagem)
+    database.registrar_mensagem(mensagem, token)
     return redirect(url_for('contatar_suporte', aviso='Reclamação enviada!'))
+
 
 @app.route('/showsuport')
 def showsup():
     return database.show_all_suport_messages()
+
 
 @app.route('/logout')
 def logout():
@@ -142,3 +133,22 @@ def logout():
     return response
 
 # FIM PAINEL DE USUARIO
+
+# Transferência (Ainda no painel do usuário)
+
+@app.route('/painel/transferir')
+def transferir():
+    token = request.cookies.get('auth_token')
+    if not isauth(token):
+        return redirect(url_for('login'))
+    return render_template('painel_user/transferir.html')
+
+
+@app.route('/painel/realiza-transferencia', methods=['POST'])
+def transferencia():
+    token = request.cookies.get('auth_token')
+    if not isauth(token):
+         return redirect(url_for('login'))
+    dados_transferencia = request.form.to_dict()
+    dados_transferencia.update(database.get_all_user_infos(token))
+    return dados_transferencia

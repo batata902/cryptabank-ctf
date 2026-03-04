@@ -40,6 +40,11 @@ class Model:
         email = self.email_cookie(token)
         consulta = self.cur.execute('SELECT nome, currency FROM users WHERE email=?', (email,)).fetchone()
         return dict(consulta)
+    
+    def get_all_user_infos(self, token):
+        email = self.email_cookie(token)
+        consulta = self.cur.execute('SELECT * FROM users WHERE email=?;', (email,)).fetchone()
+        return dict(consulta)
 
 
     def cadastrar(self, infos):
@@ -61,8 +66,9 @@ class Model:
             return True
         return False
 
-    def registrar_mensagem(self, mensagem):
-        self.conn.execute('INSERT INTO mensagens_suporte(categoria, assunto, problema) VALUES(?, ?, ?)', (mensagem['cat'], mensagem['titulo'], mensagem['problema']))
+    def registrar_mensagem(self, mensagem, token):
+        email = self.email_cookie(token)
+        self.conn.execute('INSERT INTO mensagens_suporte(categoria, assunto, problema, email) VALUES(?, ?, ?, ?)', (mensagem['cat'], mensagem['titulo'], mensagem['problema'], email))
         self.conn.commit()
 
     def show_all_suport_messages(self):
