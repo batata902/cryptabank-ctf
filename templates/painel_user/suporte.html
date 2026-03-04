@@ -9,6 +9,8 @@
 
 <body>
 
+    <div id="aviso">{{ aviso }}</div>
+
     <header>
         <h1 class="logo" data-url="{{ url_for('homepage') }}">Crypta Bank</h1>
         <a href="{{ url_for('painel') }}" class="voltar">← Voltar</a>
@@ -19,21 +21,21 @@
         <section class="card">
             <h2>Central de Suporte</h2>
 
-            <form>
+            <form action="{{ url_for('enviar_suporte') }}" method="POST">
                 <label>Assunto</label>
-                <input type="text" placeholder="Ex: Problema com transferência">
+                <input type="text" placeholder="Ex: Problema com transferência" name="titulo">
 
                 <label>Categoria</label>
-                <select>
-                    <option>Dúvida</option>
-                    <option>Problema técnico</option>
-                    <option>Pagamento</option>
-                    <option>Segurança</option>
-                    <option>Outro</option>
+                <select name="cat">
+                    <option value="duvida">Dúvida</option>
+                    <option value="problema-tec">Problema técnico</option>
+                    <option value="pagamento">Pagamento</option>
+                    <option value="sec">Segurança</option>
+                    <option value="outro">Outro</option>
                 </select>
 
                 <label>Descreva o problema</label>
-                <textarea placeholder="Explique o que aconteceu..."></textarea>
+                <textarea placeholder="Explique o que aconteceu..." name="problema"></textarea>
 
                 <button type="submit" class="btn-primary">Enviar Solicitação</button>
             </form>
@@ -48,6 +50,17 @@
 
     </main>
 
+    <script>
+        const aviso = document.querySelector('#aviso')
+        function mostrar () {
+            aviso.classList.add('mostrar')
+
+            setTimeout( () => {aviso.classList.remove('mostrar')}, 3000);
+        }
+        if (aviso.textContent !== 'None') {
+            window.onload = () => mostrar()
+        }
+    </script>
     <script src="{{ url_for('static', filename='index.js') }}"></script>
 
 </body>

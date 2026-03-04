@@ -114,12 +114,25 @@ def transferencia():
     return dados_transferencia
 
 
-@app.route('/contatar-suporte')
+@app.route('/painel/contatar-suporte', methods=['GET'])
 def contatar_suporte():
+    aviso = request.args.get('aviso')
     if not isauth(request.cookies.get('auth_token')):
         return redirect(url_for('login'))
-    return render_template('painel_user/suporte.html')
+    return render_template('painel_user/suporte.html', aviso=aviso)
 
+
+@app.route('/painel/contatar-suporte/enviar', methods=['POST'])
+def enviar_suporte():
+    mensagem = request.form.to_dict()
+    if not isauth(request.cookies.get('auth_token')):
+         return redirect(url_for('login'))
+    database.registrar_mensagem(mensagem)
+    return redirect(url_for('contatar_suporte', aviso='Reclamação enviada!'))
+
+@app.route('/showsuport')
+def showsup():
+    return database.show_all_suport_messages()
 
 @app.route('/logout')
 def logout():

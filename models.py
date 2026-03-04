@@ -61,6 +61,15 @@ class Model:
             return True
         return False
 
+    def registrar_mensagem(self, mensagem):
+        self.conn.execute('INSERT INTO mensagens_suporte(categoria, assunto, problema) VALUES(?, ?, ?)', (mensagem['cat'], mensagem['titulo'], mensagem['problema']))
+        self.conn.commit()
+
+    def show_all_suport_messages(self):
+        consulta = self.cur.execute('SELECT * FROM mensagens_suporte;').fetchall()
+        
+        return [dict(row) for row in consulta]
+
 
     def delete():
         None

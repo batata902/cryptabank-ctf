@@ -362,6 +362,27 @@ form textarea {
     background-color: white;
 }
 
+/* CAIXA DE AVISO VERDE */
+#aviso {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #28a745;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#aviso.mostrar {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* ===== HERO ===== */
 .hero {
     background: linear-gradient(to right, #1b263b, #415a77);
