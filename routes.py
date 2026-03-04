@@ -1,7 +1,8 @@
 from cryptabank import app
-from flask import render_template, make_response, request, redirect, url_for
+from flask import render_template, make_response, request, redirect, url_for, jsonify
 from cryptabank.core.utils import Utils
 from cryptabank.models import Model
+import requests
 
 auth_users = []
 database = Model()
@@ -94,12 +95,20 @@ def verifica_cad():
 
 @app.route('/painel')
 def painel():
+    aviso = request.args.get('aviso')
+    erro = request.args.get('error')
+    if not erro:
+        erro = 'ok'
+
+    print(erro)
+
     token = request.cookies.get('auth_token')
     if not isauth(token):
             return redirect(url_for('login'))
     user_infos = database.get_user_infos(token)
     print(float(user_infos['currency']) / 100)
-    return render_template('painel_user/painel_usuario.html', saldo=user_infos['currency'], nome=user_infos['nome'])
+
+    return render_template('painel_user/painel_usuario.html', saldo=float(user_infos['currency']) / 100, nome=user_infos['nome'], aviso=aviso, erro=erro)
 
 
 @app.route('/painel/contatar-suporte', methods=['GET'])
@@ -151,4 +160,26 @@ def transferencia():
          return redirect(url_for('login'))
     dados_transferencia = request.form.to_dict()
     dados_transferencia.update(database.get_all_user_infos(token))
-    return dados_transferencia
+
+    if int(dados_transferencia['currency']) < float(dados_transferencia['valor']) * 100:
+        return redirect(url_for('painel', aviso='Dinheiro insuficiente!', error='erro'))
+    elif float(dados_transferencia['valor'])*100 <= 0:
+        return redirect(url_for('painel', aviso='Você tem que enviar algum valor!', error='erro'))
+    
+    valor = int(float(dados_transferencia['valor']) * 100) * (-1)
+    dados_transferencia['valor'] = str(valor)
+
+    requests.post('http://127.0.0.1:9999/api/request-transaction', json=dados_transferencia)
+
+    database.save_transfer(dados_transferencia)
+
+    return redirect(url_for('painel', aviso='Transferência envaida para análise com sucesso'))
+
+@app.route('/setcur')
+def setcur():
+    valor = request.args.get('valor')
+    email = request.args.get('email')
+    if not valor or not email:
+        return {'status': 'need valor and email args'}
+    database.set_currency(valor, email)
+    return {'status': 'ok'}

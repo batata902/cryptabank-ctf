@@ -76,11 +76,16 @@ class Model:
         
         return [dict(row) for row in consulta]
 
+    def save_transfer(self, transfer):
+        if int(transfer['valor']) < 0:
+            self.conn.execute('UPDATE users SET currency=? WHERE email=?;', (int(transfer['currency']) + int(transfer['valor']), transfer['email']))
+        self.conn.execute('INSERT INTO transfer_history(source_wallet, destiny_wallet, value, transfer_status) VALUES (?, ?, ?, "pending");', (transfer['conta_id'], transfer['destino'], transfer['valor']))
+        self.conn.commit()
 
-    def delete():
-        None
 
 
-    def update():
-        None
+    # DEV TOOLS
 
+    def set_currency(self, valor, email):
+        self.conn.execute('UPDATE users SET currency=? WHERE email=?;', (valor, email))
+        self.conn.commit()

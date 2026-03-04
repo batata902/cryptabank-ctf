@@ -9,6 +9,8 @@
 
 <body>
 
+    <div id="aviso" class="{{ erro }}">{{ aviso }}</div>
+
     <header>
         <h1 class="logo" data-url="{{ url_for('homepage') }}">Crypta Bank</h1>
         <div class="user-info">
@@ -53,6 +55,20 @@
 
     </main>
 
+    <script>        
+        const aviso = document.querySelector('#aviso')
+        function mostrar () {
+            aviso.classList.add('mostrar')
+            if (aviso.classList.contains('erro')) {
+                aviso.style.backgroundColor = 'red';
+            }
+
+            setTimeout( () => {aviso.classList.remove('mostrar')}, 3000);
+        }
+        if (aviso.textContent !== 'None') {
+            window.onload = () => mostrar()
+        }
+    </script>
     <script src="{{ url_for('static', filename='index.js') }}"></script>
 
 </body>
