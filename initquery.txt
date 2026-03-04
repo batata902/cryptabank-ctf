@@ -32,6 +32,8 @@ CREATE TABLE IF NOT EXISTS admin_cookies(
 
 CREATE TABLE IF NOT EXISTS mensagens_suporte(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    enviado_em DATE DEFAULT CURRENT_TIMESTAMP,
+    email TEXT,
     categoria TEXT,
     assunto TEXT,
     problema TEXT
