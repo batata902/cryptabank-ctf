@@ -3,9 +3,11 @@ from flask import render_template, make_response, request, redirect, url_for, js
 from cryptabank.core.utils import Utils
 from cryptabank.models import Model
 import requests
+from sqlite3 import IntegrityError
 
 auth_users = []
 database = Model()
+app.url_map.strict_slashes = False
 
 def isauth(cookie):
     return database.is_auth(cookie)
@@ -50,8 +52,9 @@ def login():
 @app.route('/verifica_login', methods=['POST'])
 def verifica_login():
     infos = request.form.to_dict()
-    auth = database.login(infos)
 
+    auth = database.login(infos)
+    
     if not auth:
          return redirect(url_for('login', erro='Email ou senha incorretos.'))
     
@@ -79,12 +82,18 @@ def verifica_cad():
     if infos['confirmar_senha'] != infos['senha']:
         return redirect(url_for('cadastro', erro='Email já existe ou houve algum problema na criação da conta'))
     
-    auth = database.cadastrar(infos)
+    account_id = Utils.uuid()
+    infos['conta_id'] = account_id
+    try:
+        auth = database.cadastrar(infos)
+    except IntegrityError:
+        return redirect(url_for('cadastro', erro='Erro no Cadastro, email já existe.'))
+
     cookie_value = Utils.uuid(True)
     database.save_cookie(cookie_value, infos['email'])
 
     if not auth:
-         return redirect(url_for('cadastro.html', erro='Erro no Cadastro, verifique as informações e tente novamente.'))
+         return redirect(url_for('cadastro', erro='Erro no Cadastro, verifique as informações e tente novamente.'))
     
     return redirect(url_for('login'))
     
@@ -100,15 +109,14 @@ def painel():
     if not erro:
         erro = 'ok'
 
-    print(erro)
-
     token = request.cookies.get('auth_token')
     if not isauth(token):
             return redirect(url_for('login'))
     user_infos = database.get_user_infos(token)
-    print(float(user_infos['currency']) / 100)
 
-    return render_template('painel_user/painel_usuario.html', saldo=float(user_infos['currency']) / 100, nome=user_infos['nome'], aviso=aviso, erro=erro)
+    currency = requests.post('http://127.0.0.1:9999/api/get-currency', json=user_infos).json()
+
+    return render_template('painel_user/painel_usuario.html', saldo=float(currency['currency']) / 100, nome=user_infos['nome'], aviso=aviso, erro=erro)
 
 
 @app.route('/painel/contatar-suporte', methods=['GET'])
@@ -168,12 +176,20 @@ def transferencia():
     
     valor = int(float(dados_transferencia['valor']) * 100) * (-1)
     dados_transferencia['valor'] = str(valor)
+    dados_transferencia['transaction_status'] = 'pending'
 
     requests.post('http://127.0.0.1:9999/api/request-transaction', json=dados_transferencia)
 
     database.save_transfer(dados_transferencia)
 
     return redirect(url_for('painel', aviso='Transferência envaida para análise com sucesso'))
+
+@app.route('/api/user-exists', methods=['GET'])
+def user_exists():
+    account_id = request.args.get('conta_id')
+    existe = database.account_exists(account_id)
+    return jsonify({'status': existe})
+
 
 @app.route('/setcur')
 def setcur():

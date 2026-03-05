@@ -1,5 +1,6 @@
 import sqlite3
 from cryptabank.core.utils import Utils
+import requests
 
 # CRUD -> CREATE, READ, UPDATE, DELETE
 
@@ -38,7 +39,7 @@ class Model:
 
     def get_user_infos(self, token):
         email = self.email_cookie(token)
-        consulta = self.cur.execute('SELECT nome, currency FROM users WHERE email=?', (email,)).fetchone()
+        consulta = self.cur.execute('SELECT nome, conta_id, email FROM users WHERE email=?', (email,)).fetchone()
         return dict(consulta)
     
     def get_all_user_infos(self, token):
@@ -48,12 +49,13 @@ class Model:
 
 
     def cadastrar(self, infos):
-        account_id = Utils.uuid()
         data_atual = Utils.get_local_date()
 
         try:
-            self.conn.execute('INSERT INTO users(nome, cpf, email, senha, conta_id, created_at, currency) VALUES(?, ?, ?, ?, ?, ?, ?)', (infos['nome'], infos['cpf'], infos['email'], infos['senha'], account_id, data_atual, 0));
+            self.conn.execute('INSERT INTO users(nome, cpf, email, senha, conta_id, created_at) VALUES(?, ?, ?, ?, ?, ?)', (infos['nome'], infos['cpf'], infos['email'], infos['senha'], infos['account_id'], data_atual));
             self.conn.commit()
+
+            requests.post('http://127.0.0.1:9999/api/registrar-user', json=infos) # Registra no db interno dados de conta
         except KeyError:
             return False
         return True
@@ -82,7 +84,11 @@ class Model:
         self.conn.execute('INSERT INTO transfer_history(source_wallet, destiny_wallet, value, transfer_status) VALUES (?, ?, ?, "pending");', (transfer['conta_id'], transfer['destino'], transfer['valor']))
         self.conn.commit()
 
-
+    def account_exists(self, account_id):
+        consulta = self.cur.execute('SELECT * FROM users WHERE conta_id=?', (account_id,)).fetchone()
+        if consulta:
+            return True
+        return False
 
     # DEV TOOLS
 
