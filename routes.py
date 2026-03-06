@@ -81,19 +81,18 @@ def verifica_cad():
 
     if infos['confirmar_senha'] != infos['senha']:
         return redirect(url_for('cadastro', erro='Email já existe ou houve algum problema na criação da conta'))
-    
-    account_id = Utils.uuid()
-    infos['conta_id'] = account_id
+
     try:
         auth = database.cadastrar(infos)
     except IntegrityError:
         return redirect(url_for('cadastro', erro='Erro no Cadastro, email já existe.'))
+    
+    if not auth:
+        return redirect(url_for('cadastro', erro='Erro no Cadastro, verifique as informações e tente novamente.'))
 
     cookie_value = Utils.uuid(True)
     database.save_cookie(cookie_value, infos['email'])
-
-    if not auth:
-         return redirect(url_for('cadastro', erro='Erro no Cadastro, verifique as informações e tente novamente.'))
+    print(f'\033[33mAUTH\033[m ', auth)
     
     return redirect(url_for('login'))
     
@@ -166,17 +165,20 @@ def transferencia():
     token = request.cookies.get('auth_token')
     if not isauth(token):
          return redirect(url_for('login'))
+    user_infos = database.get_all_user_infos(token)
     dados_transferencia = request.form.to_dict()
-    dados_transferencia.update(database.get_all_user_infos(token))
+    dados_transferencia.update(user_infos)
+    currency = requests.post('http://127.0.0.1:9999/api/get-currency', json=user_infos).json()['currency']
 
-    if int(dados_transferencia['currency']) < float(dados_transferencia['valor']) * 100:
+    if int(currency) < float(dados_transferencia['valor']) * 100:
         return redirect(url_for('painel', aviso='Dinheiro insuficiente!', error='erro'))
     elif float(dados_transferencia['valor'])*100 <= 0:
-        return redirect(url_for('painel', aviso='Você tem que enviar algum valor!', error='erro'))
+        return redirect(url_for('painel', aviso='Valor inválido!', error='erro'))
     
     valor = int(float(dados_transferencia['valor']) * 100) * (-1)
     dados_transferencia['valor'] = str(valor)
     dados_transferencia['transaction_status'] = 'pending'
+    dados_transferencia['currency'] = currency
 
     requests.post('http://127.0.0.1:9999/api/request-transaction', json=dados_transferencia)
 
@@ -184,18 +186,3 @@ def transferencia():
 
     return redirect(url_for('painel', aviso='Transferência envaida para análise com sucesso'))
 
-@app.route('/api/user-exists', methods=['GET'])
-def user_exists():
-    account_id = request.args.get('conta_id')
-    existe = database.account_exists(account_id)
-    return jsonify({'status': existe})
-
-
-@app.route('/setcur')
-def setcur():
-    valor = request.args.get('valor')
-    email = request.args.get('email')
-    if not valor or not email:
-        return {'status': 'need valor and email args'}
-    database.set_currency(valor, email)
-    return {'status': 'ok'}

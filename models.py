@@ -50,9 +50,12 @@ class Model:
 
     def cadastrar(self, infos):
         data_atual = Utils.get_local_date()
+        account_id = Utils.uuid()
+        infos['conta_id'] = account_id
+        infos['created_at'] = data_atual
 
         try:
-            self.conn.execute('INSERT INTO users(nome, cpf, email, senha, conta_id, created_at) VALUES(?, ?, ?, ?, ?, ?)', (infos['nome'], infos['cpf'], infos['email'], infos['senha'], infos['account_id'], data_atual));
+            self.conn.execute('INSERT INTO users(nome, cpf, email, senha, conta_id, created_at) VALUES(?, ?, ?, ?, ?, ?);', (infos['nome'], infos['cpf'], infos['email'], infos['senha'], infos['conta_id'], data_atual))
             self.conn.commit()
 
             requests.post('http://127.0.0.1:9999/api/registrar-user', json=infos) # Registra no db interno dados de conta
@@ -79,19 +82,6 @@ class Model:
         return [dict(row) for row in consulta]
 
     def save_transfer(self, transfer):
-        if int(transfer['valor']) < 0:
-            self.conn.execute('UPDATE users SET currency=? WHERE email=?;', (int(transfer['currency']) + int(transfer['valor']), transfer['email']))
         self.conn.execute('INSERT INTO transfer_history(source_wallet, destiny_wallet, value, transfer_status) VALUES (?, ?, ?, "pending");', (transfer['conta_id'], transfer['destino'], transfer['valor']))
         self.conn.commit()
 
-    def account_exists(self, account_id):
-        consulta = self.cur.execute('SELECT * FROM users WHERE conta_id=?', (account_id,)).fetchone()
-        if consulta:
-            return True
-        return False
-
-    # DEV TOOLS
-
-    def set_currency(self, valor, email):
-        self.conn.execute('UPDATE users SET currency=? WHERE email=?;', (valor, email))
-        self.conn.commit()
