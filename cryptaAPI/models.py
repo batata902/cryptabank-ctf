@@ -40,17 +40,20 @@ class Database:
     def save_transaction(self, transactions_infos):
         self.cur.execute('INSERT INTO transactions(source, source_currency, destiny, quantity, transaction_status) VALUES (?, ?, ?, ?, ?)', (transactions_infos['conta_id'], transactions_infos['currency'], transactions_infos['destino'], transactions_infos['valor'], transactions_infos['transaction_status']))
 
+        transaction_id = self.cur.lastrowid
+        print('\033[35mID DA ULTIMA TRANSACAO: \033[m')
+        print(transaction_id)
+        return transaction_id
+
         #self.send_to_liquidity(transactions_infos['conta_id'], transactions_infos['valor'])
 
 
     def change_transaction_status(self, status): # PROBLEMA DE LOGICA AQUI -> CORRIGIR
-        self.conn.execute('UPDATE transactions SET transaction_status=? WHERE source=?', (status['transaction_status'], status['conta_id'])) # Conta_id vai setar o status para todas as transações pendentes da conta, independente de quais sejam. Trocar para ID ao invés da chave de transferencia.
+        self.conn.execute('UPDATE transactions SET transaction_status=? WHERE id=?', (status['transaction_status'], status['id'])) # Conta_id vai setar o status para todas as transações pendentes da conta, independente de quais sejam. Trocar para ID ao invés da chave de transferencia.
         self.conn.commit()
 
 
     def realize_transaction(self, destiny, value):
-        print('\033[35m VALOR NO METODO \033[m')
-        print(value)
 
         self.cur.execute('UPDATE cryptabank SET currency=currency + ? WHERE account = ?;', (value, self.liquidity_id))
         self.cur.execute('UPDATE users SET currency=currency + ? WHERE conta_id=?;', (value * (-1), destiny))
@@ -67,6 +70,17 @@ class Database:
         if consulta:
             return True
         return False
+    
+
+    def set_warning(self, conta_id, warning, info):
+        self.cur.execute('INSERT INTO warning_list(warning_to, warning, info) VALUES(?, ?, ?)', (conta_id, warning, info))
+
+
+    def get_all_warnings(self, conta_id):
+        consulta = self.cur.execute('SELECT * FROM warning_list WHERE warning_to=?;', (conta_id,)).fetchall()
+        self.cur.execute('DELETE FROM warning_list WHERE warning_to=?', (conta_id,))
+
+        return [dict(row) for row in consulta]
 
 
     #DEV

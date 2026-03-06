@@ -31,3 +31,10 @@ CREATE TABLE IF NOT EXISTS transactions(
     created_at DATE DEFAULT CURRENT_TIMESTAMP,
     transaction_status TEXT
 );
+
+CREATE TABLE IF NOT EXISTS warning_list(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    warning_to TEXT,
+    warning TEXT,
+    info TEXT
+)

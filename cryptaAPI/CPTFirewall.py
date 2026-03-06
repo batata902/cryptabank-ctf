@@ -26,7 +26,6 @@ def enviar_resultado(resultado):
 
 def conta_existe(conta_id):
     existe = requests.get('http://127.0.0.1:9999/api/user-exists', params={'conta_id': conta_id}).json()
-    print(existe)
     if existe['status']:
         return True
     return False

@@ -5,6 +5,60 @@
     font-family: Arial, sans-serif;
 }
 
+/* AVISOS DO PAINEL*/
+#warnings{
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Mobile */
+@media (max-width: 600px){
+    #warnings{
+        left: 50%;
+        transform: translateX(-50%);
+        align-items: center;
+    }
+}
+
+.warning{
+    padding: 12px 18px;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    min-width: 200px;
+    animation: aparecer 0.3s ease;
+}
+
+/* tipos */
+.warning.erro{
+    background: #e53935;
+}
+
+.warning.info{
+    background: #1e88e5;
+}
+
+.warning.sucesso{
+    background: #43a047;
+}
+
+/* animação */
+@keyframes aparecer{
+    from{
+        opacity:0;
+        transform:translateY(-10px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
 body {
     background-color: #f4f6f9;
 }

@@ -111,11 +111,13 @@ def painel():
     token = request.cookies.get('auth_token')
     if not isauth(token):
             return redirect(url_for('login'))
+    
     user_infos = database.get_user_infos(token)
 
     currency = requests.post('http://127.0.0.1:9999/api/get-currency', json=user_infos).json()
+    warnings = requests.get('http://127.0.0.1:9999/api/warnings', params={'conta_id': user_infos['conta_id']}).json()
 
-    return render_template('painel_user/painel_usuario.html', saldo=float(currency['currency']) / 100, nome=user_infos['nome'], aviso=aviso, erro=erro)
+    return render_template('painel_user/painel_usuario.html', saldo=float(currency['currency']) / 100, nome=user_infos['nome'], aviso=aviso, erro=erro, warning=warnings)
 
 
 @app.route('/painel/contatar-suporte', methods=['GET'])
@@ -184,5 +186,5 @@ def transferencia():
 
     database.save_transfer(dados_transferencia)
 
-    return redirect(url_for('painel', aviso='Transferência envaida para análise com sucesso'))
+    return redirect(url_for('painel', aviso='Transferência enviada para análise com sucesso'))
 

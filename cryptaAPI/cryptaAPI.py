@@ -18,9 +18,8 @@ def registrar():
 @app.route('/api/request-transaction', methods=['POST'])
 def request_transaction():
     infos = request.get_json()
-    print(infos)
 
-    database.save_transaction(infos) # Salva no db como transação pendente
+    infos['id'] = database.save_transaction(infos) # Salva no db como transação pendente
     # infos -> 
     database.realize_transaction(infos['conta_id'], int(infos['valor']))
     requests.post('http://127.0.0.1:5050/submit', json=infos) # Envia para análise de integridade
@@ -37,6 +36,7 @@ def submit_result():
 
     elif infos['transaction_status'] == 'denied':
         database.realize_transaction(infos['conta_id'], int(infos['valor']) * (-1))
+        database.set_warning(infos['conta_id'], 'Valor extornado!', 'Seu saldo já foi atualizado!')
 
     database.change_transaction_status(infos)
 
@@ -49,11 +49,19 @@ def getcurrency():
     currency = database.get_currency_infos(infos)
     return jsonify(currency)
 
+
 @app.route('/api/user-exists', methods=['GET'])
 def user_exists():
     account_id = request.args.get('conta_id')
     existe = database.account_exists(account_id)
     return jsonify({'status': existe})
+
+@app.route('/api/warnings', methods=['GET'])
+def warnings():
+    user_id = request.args.get('conta_id')
+
+    warning = database.get_all_warnings(user_id)
+    return warning
 
 
 @app.route('/api/see-all-transactions', methods=['GET'])

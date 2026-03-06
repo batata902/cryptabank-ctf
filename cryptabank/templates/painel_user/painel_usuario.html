@@ -10,6 +10,15 @@
 <body>
 
     <div id="aviso" class="{{ erro }}">{{ aviso }}</div>
+    
+    <div id="warnings">
+    {% for w in warning %}
+        <div class="warning erro">
+            <strong>{{ w.warning }}</strong>
+            <p>{{ w.info }}</p>
+        </div>
+    {% endfor %}
+    </div>
 
     <header>
         <h1 class="logo" data-url="{{ url_for('homepage') }}">Crypta Bank</h1>
@@ -68,6 +77,23 @@
         if (aviso.textContent !== 'None') {
             window.onload = () => mostrar()
         }
+    </script>
+    <script>
+
+        const warnings = document.querySelectorAll(".warning")
+
+        warnings.forEach((box)=>{
+            setTimeout(()=>{
+                box.style.opacity = "0"
+                box.style.transform = "translateY(-10px)"
+
+                setTimeout(()=>{
+                    box.remove()
+                },300)
+
+            },4000)
+        })
+
     </script>
     <script src="{{ url_for('static', filename='index.js') }}"></script>
 
