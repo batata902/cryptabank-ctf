@@ -11,7 +11,7 @@ class Model:
         self.conn.row_factory = sqlite3.Row
         self.cur = self.conn.cursor()
 
-        self.cur.executescript(open('init.sql', 'r').read())
+        self.cur.executescript(open('CryptaBank-CTF/init.sql', 'r').read())
 
 
     def is_auth(self, cookie):

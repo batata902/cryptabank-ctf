@@ -11,8 +11,6 @@ admin_token = '123456'
 def registrar():
     infos = request.get_json()
 
-    print(infos)
-
     database.registrar(infos)
     return jsonify({'status': 'ok'})
 
@@ -24,6 +22,7 @@ def request_transaction():
 
     database.save_transaction(infos) # Salva no db como transação pendente
     # infos -> 
+    database.realize_transaction(infos['conta_id'], int(infos['valor']))
     requests.post('http://127.0.0.1:5050/submit', json=infos) # Envia para análise de integridade
 
     return jsonify({'status': 'ok'})
@@ -33,11 +32,11 @@ def request_transaction():
 def submit_result():
     infos = request.get_json()
 
-    # if infos['transaction_status'] == 'approved':
-    #     database.realize_transaction(infos['destino'], int(infos['valor']) * (-1))
+    if infos['transaction_status'] == 'approved':
+        database.realize_transaction(infos['destino'], int(infos['valor']) * (-1))
 
-    # elif infos['transaction_status'] == 'denied':
-    #     database.realize_transaction(infos['conta_id'], int(infos['valor']) * (-1))
+    elif infos['transaction_status'] == 'denied':
+        database.realize_transaction(infos['conta_id'], int(infos['valor']) * (-1))
 
     database.change_transaction_status(infos)
 

@@ -175,7 +175,7 @@ def transferencia():
     elif float(dados_transferencia['valor'])*100 <= 0:
         return redirect(url_for('painel', aviso='Valor inválido!', error='erro'))
     
-    valor = int(float(dados_transferencia['valor']) * 100) * (-1)
+    valor = int(float(dados_transferencia['valor']) * 100) 
     dados_transferencia['valor'] = str(valor)
     dados_transferencia['transaction_status'] = 'pending'
     dados_transferencia['currency'] = currency

@@ -8,10 +8,13 @@ app = Flask(__name__)
 def analyzer():
     infos = request.get_json()
 
+
     if conta_existe(infos['destino']):
         infos['transaction_status'] = 'approved'
     else:
         infos['transaction_status'] = 'denied'
+
+    print(infos['transaction_status'])
 
     enviar_resultado(infos)
     return {'status': 'ok'}
@@ -22,8 +25,9 @@ def enviar_resultado(resultado):
 
 
 def conta_existe(conta_id):
-    existe = requests.get('http://127.0.0.1:9999/api/user-exists', params=conta_id).json()
-    if existe['status'] == 'true':
+    existe = requests.get('http://127.0.0.1:9999/api/user-exists', params={'conta_id': conta_id}).json()
+    print(existe)
+    if existe['status']:
         return True
     return False
 

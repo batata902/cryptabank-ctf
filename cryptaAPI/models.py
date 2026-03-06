@@ -8,13 +8,17 @@ class Database:
         self.conn.row_factory = sqlite3.Row
         self.cur = self.conn.cursor()
 
-        self.cur.executescript(open('cryptaAPI/init_internal.sql', 'r').read())
+        self.cur.executescript(open('CryptaBank-CTF/cryptaAPI/init_internal.sql', 'r').read())
+
+        self.conn.execute('INSERT INTO cryptabank (account, is_settlement, currency) SELECT ?, 0, 0 WHERE NOT EXISTS (SELECT 1 FROM cryptabank WHERE account = ?);', (self.liquidity_id, self.liquidity_id))
+        self.conn.commit()
 
 
     def registrar(self, infos):
         print(infos)
         self.conn.execute('INSERT INTO users(email, conta_id, created_at, currency) VALUES (?, ?, ?, ?);', (infos['email'], infos['conta_id'], infos['created_at'], 0))
         self.conn.commit()
+
 
     def send_to_liquidity(self, source, value):
         self.cur.execute(
@@ -28,28 +32,36 @@ class Database:
         )
 
 
-
     def see_liquidity(self):
         consulta = self.cur.execute('SELECT * FROM cryptabank WHERE account=?', (self.liquidity_id,)).fetchone()
         return dict(consulta)
 
+
     def save_transaction(self, transactions_infos):
         self.cur.execute('INSERT INTO transactions(source, source_currency, destiny, quantity, transaction_status) VALUES (?, ?, ?, ?, ?)', (transactions_infos['conta_id'], transactions_infos['currency'], transactions_infos['destino'], transactions_infos['valor'], transactions_infos['transaction_status']))
 
-        self.send_to_liquidity(transactions_infos['conta_id'], transactions_infos['valor'])
+        #self.send_to_liquidity(transactions_infos['conta_id'], transactions_infos['valor'])
+
 
     def change_transaction_status(self, status): # PROBLEMA DE LOGICA AQUI -> CORRIGIR
         self.conn.execute('UPDATE transactions SET transaction_status=? WHERE source=?', (status['transaction_status'], status['conta_id'])) # Conta_id vai setar o status para todas as transações pendentes da conta, independente de quais sejam. Trocar para ID ao invés da chave de transferencia.
         self.conn.commit()
 
+
     def realize_transaction(self, destiny, value):
-        self.conn.execute('UPDATE users SET currency=currency + ? WHERE conta_id=?;', (value, destiny))
-        self.conn.commit()
+        print('\033[35m VALOR NO METODO \033[m')
+        print(value)
+
+        self.cur.execute('UPDATE cryptabank SET currency=currency + ? WHERE account = ?;', (value, self.liquidity_id))
+        self.cur.execute('UPDATE users SET currency=currency + ? WHERE conta_id=?;', (value * (-1), destiny))
+
+
 
     def get_currency_infos(self, infos):
         consulta = self.cur.execute('SELECT currency FROM users WHERE conta_id=? OR email=?', (infos['conta_id'], infos['email'])).fetchone()
         return dict(consulta)
     
+
     def account_exists(self, account_id):
         consulta = self.cur.execute('SELECT * FROM users WHERE conta_id=?', (account_id,)).fetchone()
         if consulta:
