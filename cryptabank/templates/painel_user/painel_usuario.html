@@ -38,6 +38,7 @@
 
         <section class="acoes">
             <a href="{{ url_for('transferir') }}" class="btn">Transferir</a>
+            <a href="{{ url_for('user_infos') }}" class="btn">Minhas informações</a>
             <a href="{{ url_for('contatar_suporte') }}" class="btn">Suporte</a>
         </section>
 
@@ -45,19 +46,19 @@
             <h2>Últimas Transações</h2>
 
             {% for t in transacoes %}
-            <div class="transacao {{ 'entrada' if t.valor > 0 else 'saida' }}">
-                <span>{{ t.tipo }}</span>
+            <div class="transacao {{ 'entrada' if (t.valor|int / 100)|float > 0 else 'saida' }}">
+                <span>{{ t.destiny_wallet }}</span>
                 <span>
-                    {% if t.valor > 0 %}
-                    + R$ {{ "%.2f"|format(t.valor) }}
+                    {% if (t.valor|int / 100)|float > 0 %}
+                    + R$ {{ "%.2f"|format((t.valor|int / 100)|float) }}
                     {% else %}
-                    - R$ {{ "%.2f"|format(t.valor|abs) }}
+                    - R$ {{ "%.2f"|format((t.valor|int / 100)|float|abs) }}
                     {% endif %}
                 </span>
             </div>
             {% endfor %}
-
         </section>
+        
         <form action="{{ url_for('logout') }}" , method="get" class="logout">
             <input type="submit" value="Sair">
         </form>

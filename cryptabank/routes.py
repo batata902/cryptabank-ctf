@@ -113,11 +113,22 @@ def painel():
             return redirect(url_for('login'))
     
     user_infos = database.get_user_infos(token)
+    transacoes = database.get_transactions_history(user_infos['conta_id'])
 
     currency = requests.post('http://127.0.0.1:9999/api/get-currency', json=user_infos).json()
     warnings = requests.get('http://127.0.0.1:9999/api/warnings', params={'conta_id': user_infos['conta_id']}).json()
 
-    return render_template('painel_user/painel_usuario.html', saldo=float(currency['currency']) / 100, nome=user_infos['nome'], aviso=aviso, erro=erro, warning=warnings)
+    return render_template('painel_user/painel_usuario.html', saldo=float(currency['currency']) / 100, nome=user_infos['nome'], aviso=aviso, erro=erro, warning=warnings, transacoes=transacoes)
+
+
+@app.route('/painel/user-infos')
+def user_infos():
+    token = request.cookies.get('auth_token')
+    if not isauth(token):
+        return redirect(url_for('login'))
+    
+    usuario = database.get_all_user_infos(token)
+    return render_template('painel_user/informacoes_usuario.html', usuario=usuario)
 
 
 @app.route('/painel/contatar-suporte', methods=['GET'])

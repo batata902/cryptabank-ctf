@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Minhas Informações - Crypta Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <header>
+        <h1 class="logo" data-url="{{ url_for('homepage') }}">Crypta Bank</h1>
+
+        <div class="user-info">
+            <span>Olá, {{ usuario.nome }}</span>
+            <img src="{{ url_for('static', filename='imagens/user.png') }}" alt="Usuário">
+        </div>
+    </header>
+
+
+    <main class="container">
+
+        <section class="perfil infos">
+
+            <h2>Minhas Informações</h2>
+
+            <div class="info-box">
+
+                <div class="info-item">
+                    <strong>ID do usuário</strong>
+                    <p>{{ usuario.id }}</p>
+                </div>
+
+                <div class="info-item">
+                    <strong>Nome</strong>
+                    <p>{{ usuario.nome }}</p>
+                </div>
+
+                <div class="info-item">
+                    <strong>CPF</strong>
+                    <p>{{ usuario.cpf }}</p>
+                </div>
+
+                <div class="info-item">
+                    <strong>Email</strong>
+                    <p>{{ usuario.email }}</p>
+                </div>
+
+                <div class="info-item chave" onclick="copiarConta()">
+                    <strong>Chave de Transferência</strong>
+
+                    <div class="copy-field">
+                        <span id="contaId">{{ usuario.conta_id }}</span>
+
+                        <button onclick="copiarConta()" class="copy-btn">
+                            📋
+                        </button>
+                    </div>
+
+                </div>
+
+                <div class="info-item">
+                    <strong>Conta criada em</strong>
+                    <p>{{ usuario.created_at }}</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="acoes">
+
+            <a href="{{ url_for('painel') }}" class="btn">Voltar ao painel</a>
+
+            <a href="{{ url_for('transferir') }}" class="btn">Transferir</a>
+
+            <a href="{{ url_for('contatar_suporte') }}" class="btn">Suporte</a>
+
+        </section>
+
+
+        <form action="{{ url_for('logout') }}" method="get" class="logout">
+            <input type="submit" value="Sair">
+        </form>
+
+    </main>
+
+    <script>
+        function copiarConta() {
+
+            const conta = document.getElementById("contaId").textContent
+            const botao = document.querySelector(".copy-btn")
+
+            navigator.clipboard.writeText(conta)
+
+            botao.textContent = "✅"
+
+            setTimeout(() => {
+                botao.textContent = "📋"
+            }, 1500)
+
+        }
+    </script>
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+
+</body>
+
+</html>

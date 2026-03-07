@@ -82,6 +82,15 @@ class Model:
         return [dict(row) for row in consulta]
 
     def save_transfer(self, transfer):
-        self.conn.execute('INSERT INTO transfer_history(source_wallet, destiny_wallet, value, transfer_status) VALUES (?, ?, ?, "pending");', (transfer['conta_id'], transfer['destino'], transfer['valor']))
+        self.conn.execute('INSERT INTO transfer_history(source_wallet, destiny_wallet, valor, transfer_status) VALUES (?, ?, ?, "pending");', (transfer['conta_id'], transfer['destino'], transfer['valor']))
         self.conn.commit()
 
+    def get_transactions_history(self, conta_id):
+        consulta = self.cur.execute('SELECT * FROM transfer_history WHERE source_wallet=? OR destiny_wallet=?;', (conta_id, conta_id)).fetchall()
+        transferencias = [dict(row) for row in consulta]
+        for t in transferencias:
+            if t['source_wallet'] == conta_id:
+                t['valor'] = int(t['valor']) * (-1)
+                print(t['valor'])
+
+        return transferencias

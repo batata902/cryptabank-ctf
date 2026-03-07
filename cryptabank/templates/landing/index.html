@@ -33,7 +33,13 @@
         <div class="hero-content">
             <h2>O banco digital que simplifica sua vida</h2>
             <p>Transferências rápidas, segurança máxima e controle total do seu dinheiro.</p>
+
+            {% if not autenticado %}
             <a href="{{ url_for('cadastro') }}" class="btn-principal">Abra sua conta grátis</a>
+            {% else %}
+            <a href="{{ url_for('painel') }}" class="btn-principal">Acesse o painel de controle</a>
+            {% endif %}
+
         </div>
     </section>
 
