@@ -10,14 +10,14 @@
 <body>
 
     <div id="aviso" class="{{ erro }}">{{ aviso }}</div>
-    
+
     <div id="warnings">
-    {% for w in warning %}
+        {% for w in warning %}
         <div class="warning erro">
             <strong>{{ w.warning }}</strong>
             <p>{{ w.info }}</p>
         </div>
-    {% endfor %}
+        {% endfor %}
     </div>
 
     <header>
@@ -58,22 +58,22 @@
             </div>
             {% endfor %}
         </section>
-        
+
         <form action="{{ url_for('logout') }}" , method="get" class="logout">
             <input type="submit" value="Sair">
         </form>
 
     </main>
 
-    <script>        
+    <script>
         const aviso = document.querySelector('#aviso')
-        function mostrar () {
+        function mostrar() {
             aviso.classList.add('mostrar')
             if (aviso.classList.contains('erro')) {
                 aviso.style.backgroundColor = 'red';
             }
 
-            setTimeout( () => {aviso.classList.remove('mostrar')}, 3000);
+            setTimeout(() => { aviso.classList.remove('mostrar') }, 3000);
         }
         if (aviso.textContent !== 'None') {
             window.onload = () => mostrar()
@@ -83,16 +83,16 @@
 
         const warnings = document.querySelectorAll(".warning")
 
-        warnings.forEach((box)=>{
-            setTimeout(()=>{
+        warnings.forEach((box) => {
+            setTimeout(() => {
                 box.style.opacity = "0"
                 box.style.transform = "translateY(-10px)"
 
-                setTimeout(()=>{
+                setTimeout(() => {
                     box.remove()
-                },300)
+                }, 300)
 
-            },4000)
+            }, 4000)
         })
 
     </script>
