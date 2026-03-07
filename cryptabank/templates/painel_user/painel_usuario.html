@@ -33,7 +33,7 @@
         <section class="saldo">
             <h2>Saldo Disponível</h2>
 
-            <p class="valor">R$ {{ "%.2f"|format(saldo)|replace('.', ',') }}</p>
+            <p class="valor">R$ {{ "{:,.2f}".format(saldo).replace(",", "X").replace(".", ",").replace("X", ".") }}</p>
         </section>
 
         <section class="acoes">

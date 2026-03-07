@@ -1,3 +1,8 @@
+:root {
+    --cor1: rgb(20, 22, 44);
+    --cor2: rgb(36, 40, 80);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -60,12 +65,13 @@
 }
 
 body {
-    background-color: rgb(30, 32, 49);
+    background-color: rgb(19, 20, 32);
 }
 
 /* HEADER */
 header {
-    background-color: #0d1b2a;
+    /* background-color: #0d1b2a; */
+    background-color: #050a10;
     color: white;
     display: flex;
     justify-content: space-between;
@@ -96,7 +102,7 @@ header h1 {
 
 /* SALDO */
 .saldo {
-    background: white;
+    background: rgb(20, 22, 44);
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
@@ -105,14 +111,14 @@ header h1 {
 
 .saldo h2 {
     font-size: 18px;
-    color: #555;
+    color: white;
 }
 
 .valor {
     font-size: 32px;
     font-weight: bold;
     margin-top: 10px;
-    color: #1b9c85;
+    color: #23c6a8;
 }
 
 /* AÇÕES */
@@ -146,7 +152,7 @@ header h1 {
 
 /* TRANSAÇÕES */
 .transacoes {
-    background: white;
+    background: rgb(20, 22, 44);
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
@@ -158,8 +164,9 @@ header h1 {
 .transacoes h2 {
     position: sticky;
     top: -25px; /* compensa o padding da section */
-    background: white;
+    background: rgb(20, 22, 44);
     z-index: 10;
+    color: white;
 
     padding: 10px 0 15px 0;
     border-bottom: 1px solid #eee;
@@ -188,15 +195,16 @@ header h1 {
 }
 
 .logout > input {
-    background-color: rgb(64, 2, 2);
+    background-color: rgb(99, 0, 0);
     color: white;
     font-size: 20px;
     cursor: pointer;
+    border-color: rgb(99, 0, 0);
     transition: background-color 0.3s ease;
 }
 
 .logout > input:hover {
-    background-color: rgb(115, 17, 17);
+    background-color: rgb(155, 22, 22);
     transition: background-color 0.3s ease;
 }
 
@@ -213,7 +221,8 @@ header h1 {
 
 /* CARD PADRÃO */
 .card {
-    background: white;
+    background: var(--cor1);
+    color: white;
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
@@ -242,7 +251,18 @@ form select {
     padding: 10px;
     border-radius: 6px;
     border: 1px solid #ccc;
+    color: white;
     outline: none;
+    background-color: var(--cor2);
+}
+
+::placeholder {
+    color: rgb(211, 207, 207);
+}
+
+input:focus,
+textarea:focus {
+    border-color: green;
 }
 
 form textarea {
@@ -381,7 +401,7 @@ form textarea {
     justify-content: space-between;
     align-items: center;
     padding: 20px 40px;
-    background-color: #0d1b2a;
+    background-color: #050a10;
 }
 
 .logo {
@@ -400,6 +420,7 @@ form textarea {
     color: white;
     font-weight: bold;
 }
+
 
 .btn-login {
     padding: 8px 15px;
@@ -483,6 +504,7 @@ form textarea {
     text-align: center;
     max-width: 1000px;
     margin: auto;
+    color: white;
 }
 
 .secao.img {
@@ -515,7 +537,7 @@ form textarea {
 }
 
 .fundo-claro {
-    background-color: #f4f6f9;
+    background-color: var(--cor1);
 }
 
 /* ===== BENEFÍCIOS ===== */
@@ -528,7 +550,7 @@ form textarea {
 }
 
 .card-beneficio {
-    background: white;
+    background: var(--cor2);
     padding: 25px;
     border-radius: 10px;
     width: 250px;
@@ -569,7 +591,8 @@ form textarea {
 
 /* INFORMACOES USER */
 .perfil{
-    background:#fff;
+    background: var(--cor1);
+    color: white;
     padding:20px;
     border-radius:10px;
 }
@@ -582,7 +605,7 @@ form textarea {
 }
 
 .info-item{
-    background:#f5f5f5;
+    background:var(--cor2);
     padding:15px;
     border-radius:8px;
 }
@@ -590,7 +613,7 @@ form textarea {
 .info-item strong{
     display:block;
     font-size:14px;
-    color:#555;
+    color:#b9b9b9;
 }
 
 .info-item p{
