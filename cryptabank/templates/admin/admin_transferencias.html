@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Transferências - Admin | Crypta Bank</title>
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 </head>
 <body>
 
@@ -13,12 +13,12 @@
     <aside class="sidebar">
         <h2>Admin</h2>
         <nav>
-            <a href="admin_dashboard.html">📊 Dashboard</a>
+            <a href="{{ url_for('admin') }}">📊 Dashboard</a>
             <a href="#">👥 Usuários</a>
-            <a href="admin_transferencias.html">💸 Transferências</a>
-            <a href="#">🎧 Suporte</a>
+            <a href="{{ url_for('admin_transf') }}">💸 Transferências</a>
+            <a href="{{ url_for('suporte') }}">🎧 Suporte</a>
             <a href="#">🏦 Carteiras</a>
-            <a href="admin_configuracoes.html">⚙ Configurações</a>
+            <a href="{{ url_for('admin_config') }}">⚙ Configurações</a>
         </nav>
     </aside>
 

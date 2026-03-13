@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhe do Chamado - Crypta Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/suporte_admin.css') }}">
+</head>
+
+<body>
+
+    <header class="header-admin">
+        <h1>Crypta Bank - Painel de Suporte</h1>
+        <div class="admin-info">
+            <span>Suporte</span>
+            <a href="index.html">Sair</a>
+        </div>
+    </header>
+
+    <main class="container-admin">
+
+        <section class="card-admin">
+
+            <h2>Detalhes do Chamado</h2>
+
+            <div class="detalhe-chamado">
+
+                <div class="campo">
+                    <label>Cliente</label>
+                    <p id="cliente">João Silva</p>
+                </div>
+
+                <div class="campo">
+                    <label>Tipo de Problema</label>
+                    <p id="assunto">Problema Técnico</p>
+                </div>
+
+                <div class="campo">
+                    <label>Assunto</label>
+                    <p id="assunto">Problema com transferência</p>
+                </div>
+
+                <div class="campo">
+                    <label>Data</label>
+                    <p id="data">01/03/2026</p>
+                </div>
+
+                <div class="campo">
+                    <label>Status</label>
+                    <select id="status">
+                        <option value="aberto">Aberto</option>
+                        <option value="andamento">Em andamento</option>
+                        <option value="resolvido">Resolvido</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label>Mensagem do Cliente</label>
+                    <div class="mensagem-cliente" id="mensagem">
+                        Minha transferência não foi concluída...
+                    </div>
+                </div>
+
+                <div class="campo">
+                    <label>Resposta do Suporte</label>
+                    <textarea id="resposta" placeholder="Digite a resposta para o cliente..."></textarea>
+                </div>
+
+                <div class="acoes">
+                    <button onclick="salvarResposta()">Salvar Resposta</button>
+                    <button onclick="voltar()">Voltar</button>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <p>© 2026 Crypta Bank - Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+
+        function voltar() {
+            window.location.href = "{{ url_for('suporte') }}";
+        }
+
+        function salvarResposta() {
+            const resposta = document.getElementById("resposta").value;
+            const status = document.getElementById("status").value;
+
+            alert("Resposta salva!\nStatus: " + status + "\nResposta: " + resposta);
+
+            // Aqui você pode integrar com backend futuramente
+        }
+
+        // pegar ID do chamado pela URL
+        const params = new URLSearchParams(window.location.search);
+        const chamadoId = params.get("id");
+
+        console.log("Chamado ID:", chamadoId);
+
+        // futuramente usar esse ID para buscar os dados no backend
+
+    </script>
+
+</body>
+
+</html>

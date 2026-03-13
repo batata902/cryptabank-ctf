@@ -1,5 +1,5 @@
 from cryptabank import app
-from flask import render_template, make_response, request, redirect, url_for, jsonify
+from flask import render_template, make_response, request, redirect, url_for
 from cryptabank.core.utils import Utils
 from cryptabank.models import Model
 import requests
@@ -199,3 +199,35 @@ def transferencia():
 
     return redirect(url_for('painel', aviso='Transferência enviada para análise com sucesso'))
 
+
+# PAINEL ADMIN
+
+@app.route('/admin/home')
+def admin():
+    return render_template('admin/admin.html')
+
+@app.route('/admin/transferencias')
+def admin_transf():
+    return render_template('admin/admin_transferencias.html')
+
+@app.route('/admin/config')
+def admin_config():
+    return render_template('admin/config.html')
+
+
+@app.route('/admin/detalhes')
+def admin_detalhes():
+    return render_template('admin/transferencia_detalhe.html')
+
+# PAINEL DE SUPORTE
+
+@app.route('/admin/suporte')
+def suporte():
+    return render_template('admin/painel.html')
+
+@app.route('/admin/suporte/detalhes', methods=['GET'])
+def detalhes_chamado():
+    id_chamado = request.args.get('id')
+    return render_template('admin/detalhes_chamado.html')
+
+# FIM PAINEL DE SUPORTE
