@@ -40,9 +40,10 @@ CREATE TABLE IF NOT EXISTS transfer_history(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     source_wallet TEXT,
     destiny_wallet TEXT,
-    valor TEXT,
+    valor INTEGER,
     dia DATE DEFAULT CURRENT_TIMESTAMP,
-    transfer_status TEXT
+    transfer_status TEXT,
+    descr TEXT
 );
 
 

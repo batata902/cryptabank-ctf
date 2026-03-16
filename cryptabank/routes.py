@@ -118,6 +118,11 @@ def painel():
     currency = requests.post('http://127.0.0.1:9999/api/get-currency', json=user_infos).json()
     warnings = requests.get('http://127.0.0.1:9999/api/warnings', params={'conta_id': user_infos['conta_id']}).json()
 
+    for t in transacoes:
+        if t['destiny_wallet'] == '':
+            database.delete_transfer(t['id'])
+            transacoes.remove(t)
+
     return render_template('painel_user/painel_usuario.html', saldo=float(currency['currency']) / 100, nome=user_infos['nome'], aviso=aviso, erro=erro, warning=warnings, transacoes=transacoes)
 
 
@@ -161,6 +166,15 @@ def logout():
 
     return response
 
+@app.route('/painel/transferencia')
+def detalhe_transf():
+    transf = request.args.get('id')
+
+    transacao = database.get_transaction_by_id(transf)
+    nome_destino = database.get_user_name_by_transfKey(transacao['destiny_wallet'])
+
+    return render_template('painel_user/transf-detalhada.html', t=transacao, nome=nome_destino['nome'])
+
 # FIM PAINEL DE USUARIO
 
 # Transferência (Ainda no painel do usuário)
@@ -180,6 +194,9 @@ def transferencia():
          return redirect(url_for('login'))
     user_infos = database.get_all_user_infos(token)
     dados_transferencia = request.form.to_dict()
+
+    print(dados_transferencia)
+
     dados_transferencia.update(user_infos)
     currency = requests.post('http://127.0.0.1:9999/api/get-currency', json=user_infos).json()['currency']
 

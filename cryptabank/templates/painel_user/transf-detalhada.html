@@ -9,7 +9,7 @@
 
 <header>
     <h1>Crypta Bank</h1>
-    <a href="historico.html" class="voltar">← Voltar</a>
+    <a href="{{ url_for('painel') }}" class="voltar">← Voltar</a>
 </header>
 
 <main class="container">
@@ -29,37 +29,32 @@
 
         <div class="linha">
             <span class="label">Valor:</span>
-            <span class="valor-destaque">+ R$ 2.000,00</span>
+            <span class="valor-destaque">+ R$ {{ "{:,.2f}".format(t.valor).replace(",", "X").replace(".", ",").replace("X", ".") }}</span>
         </div>
 
         <div class="linha">
             <span class="label">Destinatário:</span>
-            <span>Maria Oliveira</span>
+            <span>{{ nome }}</span>
         </div>
 
         <div class="linha">
             <span class="label">Banco:</span>
-            <span>Banco XPTO</span>
+            <span>Crypta Bank</span>
         </div>
 
         <div class="linha">
-            <span class="label">Chave PIX:</span>
-            <span>maria@email.com</span>
+            <span class="label">Chave de Transferencia:</span>
+            <span>{{ t.destiny_wallet }}</span>
         </div>
 
         <div class="linha">
             <span class="label">Data:</span>
-            <span>01/03/2026 - 14:32</span>
-        </div>
-
-        <div class="linha">
-            <span class="label">ID da Transação:</span>
-            <span>#TRX-984523</span>
+            <span>{{ t.dia }}</span>
         </div>
 
         <div class="linha">
             <span class="label">Descrição:</span>
-            <span>Pagamento referente a serviços</span>
+            <span>{{ t.descr }}</span>
         </div>
 
     </section>

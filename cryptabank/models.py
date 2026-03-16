@@ -11,7 +11,7 @@ class Model:
         self.conn.row_factory = sqlite3.Row
         self.cur = self.conn.cursor()
 
-        self.cur.executescript(open('init.sql', 'r').read())
+        self.cur.executescript(open('schema.sql', 'r').read())
 
 
     def is_auth(self, cookie):
@@ -40,6 +40,10 @@ class Model:
     def get_user_infos(self, token):
         email = self.email_cookie(token)
         consulta = self.cur.execute('SELECT nome, conta_id, email FROM users WHERE email=?', (email,)).fetchone()
+        return dict(consulta)
+    
+    def get_user_name_by_transfKey(self, key):
+        consulta = self.cur.execute('SELECT nome FROM users WHERE conta_id=?', (key,)).fetchone()
         return dict(consulta)
     
     def get_all_user_infos(self, token):
@@ -82,7 +86,7 @@ class Model:
         return [dict(row) for row in consulta]
 
     def save_transfer(self, transfer):
-        self.conn.execute('INSERT INTO transfer_history(source_wallet, destiny_wallet, valor, transfer_status) VALUES (?, ?, ?, "pending");', (transfer['conta_id'], transfer['destino'], transfer['valor']))
+        self.conn.execute('INSERT INTO transfer_history(source_wallet, destiny_wallet, valor, transfer_status, descr) VALUES (?, ?, ?, "pending");', (transfer['conta_id'], transfer['destino'], transfer['valor'], transfer['desc']))
         self.conn.commit()
 
     def get_transactions_history(self, conta_id):
@@ -94,3 +98,14 @@ class Model:
                 print(t['valor'])
 
         return transferencias
+    
+    def get_transaction_by_id(self, id):
+        consulta = self.cur.execute('SELECT * FROM transfer_history WHERE id=?', (id,)).fetchone()
+        obj = dict(consulta)
+        obj['valor'] = int(obj['valor'])
+
+        return obj
+    
+    def delete_transfer(self, transfer_id):
+        self.conn.execute('DELETE FROM transfer_history WHERE id=?', (transfer_id,))
+        self.conn.commit()

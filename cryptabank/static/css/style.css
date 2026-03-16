@@ -183,6 +183,11 @@ header h1 {
     border-bottom: none;
 }
 
+.transacao:hover {
+    background-color: rgb(52, 57, 113);
+    cursor: pointer;
+}
+
 .entrada {
     color: green;
 }
@@ -352,8 +357,8 @@ form textarea {
 }
 
 .status.sucesso {
-    background-color: #e6f9f0;
-    color: #1b9c85;
+    background-color: #aef5d4;
+    color: #15806c;
 }
 
 .status.pendente {
@@ -379,7 +384,7 @@ form textarea {
 
 .label {
     font-weight: bold;
-    color: #555;
+    color: #bdbdbd;
 }
 
 .valor-destaque {

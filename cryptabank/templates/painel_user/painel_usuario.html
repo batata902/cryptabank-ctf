@@ -46,7 +46,7 @@
             <h2>Últimas Transações</h2>
 
             {% for t in transacoes %}
-            <div class="transacao {{ 'entrada' if (t.valor|int / 100)|float > 0 else 'saida' }}">
+            <div class="transacao {{ 'entrada' if (t.valor|int / 100)|float > 0 else 'saida' }}" onclick="verTransferencia({{ t.id }})" id="hist_trans">
                 <span>{{ t.destiny_wallet }}</span>
                 <span>
                     {% if (t.valor|int / 100)|float > 0 %}
@@ -80,6 +80,10 @@
         }
     </script>
     <script>
+
+        function verTransferencia(id) {
+            window.location.href = "{{ url_for('detalhe_transf') }}?id=" + id;
+        }
 
         const warnings = document.querySelectorAll(".warning")
 
