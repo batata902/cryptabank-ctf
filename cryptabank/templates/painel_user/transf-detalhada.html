@@ -29,7 +29,7 @@
 
         <div class="linha">
             <span class="label">Valor:</span>
-            <span class="valor-destaque">+ R$ {{ "{:,.2f}".format(t.valor).replace(",", "X").replace(".", ",").replace("X", ".") }}</span>
+            <span class="valor-destaque">+ R$ {{ "%.2f"|format((t.valor|int / 100)|float)|replace('.', ',') }}</span>
         </div>
 
         <div class="linha">

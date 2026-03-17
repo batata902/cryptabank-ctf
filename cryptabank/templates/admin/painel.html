@@ -13,7 +13,7 @@
         <h1>Crypta Bank - Painel de Suporte</h1>
         <div class="admin-info">
             <span>Suporte</span>
-            <a href="index.html">Sair</a>
+            <a href="{{ url_for('homepage') }}">Sair</a>
         </div>
     </header>
 
@@ -25,21 +25,23 @@
             <ul class="lista-chamados" id="lista-chamados">
 
                 <!-- EXEMPLO DE CHAMADO -->
-                <li class="chamado aberto" data-id="1">
-                    <div class="info">
-                        <span class="cliente">João Silva</span>
-                        <span class="assunto">Problema com transferência</span>
-                        <span class="mensagem">Minha transferência não foi concluída...</span>
-                    </div>
+                {% for c in chamados %}
+                    <li class="chamado aberto" data-id="1">
+                        <div class="info">
+                            <span class="cliente">{{ c.email }}</span>
+                            <span class="assunto"> {{ c.assunto }} </span>
+                            <span class="mensagem"> {{ c.problema }} </span>
+                        </div>
 
-                    <div class="meta">
-                        <span class="data">01/03/2026</span>
-                        <span class="status">Aberto</span>
-                        <button onclick="verChamado(1)">Ver</button>
-                    </div>
-                </li>
+                        <div class="meta">
+                            <span class="data">{{ c.enviado_em }}</span>
+                            <span class="status">Aberto</span>
+                            <button onclick="verChamado({{ c.id }})">Ver</button>
+                        </div>
+                    </li>
+                {% endfor %}
 
-                <li class="chamado andamento" data-id="2">
+                <!-- <li class="chamado andamento" data-id="2">
                     <div class="info">
                         <span class="cliente">Maria Oliveira</span>
                         <span class="assunto">Dúvida sobre PIX</span>
@@ -65,7 +67,7 @@
                         <span class="status">Resolvido</span>
                         <button onclick="verChamado(3)">Ver</button>
                     </div>
-                </li>
+                </li> -->
 
             </ul>
         </section>
@@ -78,7 +80,7 @@
 
     <script>
         function verChamado(id) {
-            window.location.href = "{{ url_for('detalhes_chamado') }}";
+            window.location.href = "{{ url_for('detalhes_chamado') }}?id=" + id;
         }
     </script>
 

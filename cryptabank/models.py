@@ -95,7 +95,6 @@ class Model:
         for t in transferencias:
             if t['source_wallet'] == conta_id:
                 t['valor'] = int(t['valor']) * (-1)
-                print(t['valor'])
 
         return transferencias
     
@@ -109,3 +108,48 @@ class Model:
     def delete_transfer(self, transfer_id):
         self.conn.execute('DELETE FROM transfer_history WHERE id=?', (transfer_id,))
         self.conn.commit()
+
+
+    # ADMIN PANEL
+    def num_chamados(self):
+        consulta = dict(self.cur.execute('SELECT COUNT(*) FROM mensagens_suporte;').fetchone())
+        
+        return consulta['COUNT(*)']
+    
+
+    def get_chamado_by_id(self, id):
+        consulta = self.cur.execute('SELECT * FROM mensagens_suporte WHERE id=?;', (id,)).fetchone()
+
+        return dict(consulta)
+    
+    def get_all_chamados(self):
+        consulta = self.cur.execute('SELECT * FROM mensagens_suporte;').fetchall()
+
+        return [dict(row) for row in consulta]
+
+    def get_all_users(self):
+        consulta = self.cur.execute('SELECT * FROM users;').fetchall()
+        users = [dict(row) for row in consulta]
+
+        return users
+    
+    def get_all_transfs(self):
+        consulta = self.cur.execute('SELECT * FROM transfer_history;').fetchall()
+
+        return [dict(row) for row in consulta]
+
+    def count_users(self):
+        consulta = dict(self.cur.execute('SELECT COUNT(*) FROM users;').fetchone())
+        consulta['num_users'] = consulta['COUNT(*)']
+        consulta.pop('COUNT(*)')
+        return consulta
+
+    def total_em_contas(self):
+        total = requests.get('http://localhost:9999/api/total-em-contas').json()
+        return total
+
+    def get_dashboard_infos(self):
+        num_users = self.count_users()
+        total_contas = self.total_em_contas()
+
+        return num_users | total_contas

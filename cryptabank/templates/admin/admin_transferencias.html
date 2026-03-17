@@ -27,7 +27,7 @@
 
         <header class="topbar">
             <h1>Gerenciar Transferências</h1>
-            <a href="index.html">Sair</a>
+            <a href="{{ url_for('homepage') }}">Sair</a>
         </header>
 
         <!-- FILTROS -->
@@ -70,32 +70,19 @@
 
                 <tbody>
 
-                    <!-- EXEMPLO -->
-                    <tr>
-                        <td>#1023</td>
-                        <td>João Silva</td>
-                        <td class="entrada">Entrada</td>
-                        <td>R$ 2.000,00</td>
-                        <td class="status concluida">Concluída</td>
-                        <td>01/03/2026</td>
-                        <td>
-                            <button class="btn-detalhe">Ver</button>
-                            <button class="btn-cancelar">Cancelar</button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>#1024</td>
-                        <td>Maria Oliveira</td>
-                        <td class="saida">Saída</td>
-                        <td>R$ 350,00</td>
-                        <td class="status pendente">Pendente</td>
-                        <td>01/03/2026</td>
-                        <td>
-                            <button class="btn-detalhe">Ver</button>
-                            <button class="btn-cancelar">Cancelar</button>
-                        </td>
-                    </tr>
+                    {% for t in transfs %}
+                        <tr>
+                            <td>{{ t.id }}</td>
+                            <td>{{ t.source_wallet }}</td>
+                            <td class="entrada">Entrada</td>
+                            <td>R$ {{ "%.2f"|format((t.valor|int / 100)|float)|replace('.', ',') }}</td>
+                            <td class="status concluida">Concluída</td>
+                            <td>{{ t.dia }}</td>
+                            <td>
+                                <button class="btn-detalhe">Ver</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
 
                 </tbody>
             </table>

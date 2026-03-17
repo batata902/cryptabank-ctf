@@ -63,6 +63,13 @@ def warnings():
     warning = database.get_all_warnings(user_id)
     return warning
 
+@app.route('/api/total-em-contas')
+def total_em_contas():
+    total = database.get_total_currrency()
+    return jsonify(total)
+
+# DEV
+
 
 @app.route('/api/see-all-transactions', methods=['GET'])
 def see_trans():
@@ -100,4 +107,4 @@ def setcur():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=9999, debug=True)
+    app.run(port=9999, debug=True)

@@ -219,13 +219,33 @@ def transferencia():
 
 # PAINEL ADMIN
 
+@app.route('/admin')
+def a():
+    return redirect(url_for('admin'))
+
 @app.route('/admin/home')
 def admin():
-    return render_template('admin/admin.html')
+    infos = database.get_dashboard_infos()
+    users = database.get_all_users()
+    num_chamados = database.num_chamados()
+
+    print(infos)
+    return render_template('admin/admin.html', infos=infos, users=users, num_chamados=num_chamados)
+
+@app.route('/admin/conta', methods=['GET'])
+def detailed_account():
+    id_conta = request.args.get('id')
+
+    return 'Fazer'
 
 @app.route('/admin/transferencias')
 def admin_transf():
-    return render_template('admin/admin_transferencias.html')
+    transfs = database.get_all_transfs()
+
+    for t in transfs:
+        t['valor'] = int(t['valor'])
+
+    return render_template('admin/admin_transferencias.html', transfs=transfs)
 
 @app.route('/admin/config')
 def admin_config():
@@ -240,11 +260,15 @@ def admin_detalhes():
 
 @app.route('/admin/suporte')
 def suporte():
-    return render_template('admin/painel.html')
+    chamados = database.get_all_chamados()
+
+    return render_template('admin/painel.html', chamados=chamados)
 
 @app.route('/admin/suporte/detalhes', methods=['GET'])
 def detalhes_chamado():
     id_chamado = request.args.get('id')
-    return render_template('admin/detalhes_chamado.html')
+    chamado = database.get_chamado_by_id(id_chamado)
+
+    return render_template('admin/detalhes_chamado.html', chamado=chamado)
 
 # FIM PAINEL DE SUPORTE

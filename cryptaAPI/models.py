@@ -81,6 +81,14 @@ class Database:
         self.cur.execute('DELETE FROM warning_list WHERE warning_to=?', (conta_id,))
 
         return [dict(row) for row in consulta]
+    
+
+    def get_total_currrency(self):
+        consulta = self.cur.execute('SELECT SUM(currency) FROM users;').fetchone()
+        total = dict(consulta)
+        total['total'] = int(consulta["SUM(currency)"])
+        total.pop("SUM(currency)")
+        return total
 
 
     #DEV

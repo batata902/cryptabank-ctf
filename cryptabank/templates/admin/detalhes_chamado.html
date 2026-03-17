@@ -13,7 +13,7 @@
         <h1>Crypta Bank - Painel de Suporte</h1>
         <div class="admin-info">
             <span>Suporte</span>
-            <a href="index.html">Sair</a>
+            <a href="{{ url_for('homepage') }}">Sair</a>
         </div>
     </header>
 
@@ -27,22 +27,22 @@
 
                 <div class="campo">
                     <label>Cliente</label>
-                    <p id="cliente">João Silva</p>
+                    <p id="cliente"> {{ chamado.email }} </p>
                 </div>
 
                 <div class="campo">
                     <label>Tipo de Problema</label>
-                    <p id="assunto">Problema Técnico</p>
+                    <p id="assunto"> {{ chamado.categoria }} </p>
                 </div>
 
                 <div class="campo">
                     <label>Assunto</label>
-                    <p id="assunto">Problema com transferência</p>
+                    <p id="assunto"> {{ chamado.problema }} </p>
                 </div>
 
                 <div class="campo">
                     <label>Data</label>
-                    <p id="data">01/03/2026</p>
+                    <p id="data"> {{ chamado.enviado_em }} </p>
                 </div>
 
                 <div class="campo">
@@ -57,7 +57,7 @@
                 <div class="campo">
                     <label>Mensagem do Cliente</label>
                     <div class="mensagem-cliente" id="mensagem">
-                        Minha transferência não foi concluída...
+                        {{ chamado.problema }}
                     </div>
                 </div>
 
