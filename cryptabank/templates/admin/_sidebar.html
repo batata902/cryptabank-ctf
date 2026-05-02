@@ -1,0 +1,24 @@
+{# _sidebar.html — inclua com: {% set admin_nivel = admin_nivel %} {% include 'admin/_sidebar.html' %} #}
+<aside class="sidebar">
+    <div class="sidebar-brand"><span class="icon">🏦</span> Crypta Bank</div>
+    <nav>
+        {% if admin_nivel == 1 %}
+        <a href="{{ url_for('admin') }}" {% if active == 'dashboard' %}class="active"{% endif %}>📊 Dashboard</a>
+        <a href="{{ url_for('admin_transf') }}" {% if active == 'transf' %}class="active"{% endif %}>💸 Transferências</a>
+        {% endif %}
+        <a href="{{ url_for('suporte') }}" {% if active == 'suporte' %}class="active"{% endif %}>
+            🎧 Suporte
+            {% if num_chamados is defined and num_chamados and admin_nivel == 1 %}
+            <span class="badge danger" style="margin-left:auto;font-size:11px;">{{ num_chamados }}</span>
+            {% endif %}
+        </a>
+        {% if admin_nivel == 1 %}
+        <a href="{{ url_for('admin_config') }}" {% if active == 'config' %}class="active"{% endif %}>⚙ Configurações</a>
+        <a href="{{ url_for('criar_admin') }}" {% if active == 'admins' %}class="active"{% endif %}>👤 Gerenciar Admins</a>
+        {% endif %}
+    </nav>
+    <div class="sidebar-footer">
+        {% if admin_nivel == 1 %}Admin{% else %}Suporte{% endif %} Panel v1.0
+        &nbsp;|&nbsp;<a href="{{ url_for('admin_logout') }}" style="color:var(--muted);">Sair</a>
+    </div>
+</aside>

@@ -2,114 +2,90 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Detalhe da Transferência - Admin | Crypta Bank</title>
+    <title>Detalhe da Transferência — Admin | Crypta Bank</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 </head>
 <body>
 
 <div class="admin-layout">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <h2>Admin</h2>
-        <nav>
-            <a href="{{ url_for('admin') }}">📊 Dashboard</a>
-            <a href="#">👥 Usuários</a>
-            <a href="{{ url_for('admin_transf') }}">💸 Transferências</a>
-            <a href="{{ url_for('suporte') }}">🎧 Suporte</a>
-            <a href="#">🏦 Carteiras</a>
-            <a href="{{ url_for('admin_config') }}">⚙ Configurações</a>
-        </nav>
-    </aside>
+    {% set active = 'transf' %}
+    {% include 'admin/_sidebar.html' %}
 
-    <!-- CONTEÚDO -->
     <main class="main-content">
 
-        <header class="topbar">
+        <div class="topbar">
             <h1>Detalhe da Transferência</h1>
-            <a href="admin_transferencias.html">← Voltar</a>
-        </header>
+            <a href="{{ url_for('admin_transf') }}">← Voltar</a>
+        </div>
 
-        <section class="card detalhe-transferencia">
+        <div class="page-body">
 
-            <h3>ID da Transação: #1024</h3>
-
-            <div class="status-box pendente">
-                Status: Pendente
-            </div>
-
-            <div class="grid-detalhes">
-
-                <div class="campo">
-                    <label>Usuário</label>
-                    <p>Maria Oliveira</p>
+            <div class="card detalhe-transferencia">
+                <div class="card-header">
+                    <h2>Transação #{{ transf.id }}</h2>
+                    {% set s = transf.transfer_status %}
+                    <div class="status-box {{ 'pendente' if s == 'pending' else ('concluida' if s == 'concluida' else 'cancelada') }}">
+                        Status: {{ 'Pendente' if s == 'pending' else ('Concluída' if s == 'concluida' else 'Cancelada') }}
+                    </div>
                 </div>
 
-                <div class="campo">
-                    <label>Email</label>
-                    <p>maria@email.com</p>
+                <div class="grid-detalhes">
+
+                    <div class="campo">
+                        <label>Remetente</label>
+                        <p>{{ nome_remetente }}</p>
+                    </div>
+
+                    <div class="campo">
+                        <label>Destinatário</label>
+                        <p>{{ nome_destinatario }}</p>
+                    </div>
+
+                    <div class="campo">
+                        <label>Carteira Origem</label>
+                        <p style="font-family:monospace;font-size:13px;">{{ transf.source_wallet }}</p>
+                    </div>
+
+                    <div class="campo">
+                        <label>Carteira Destino</label>
+                        <p style="font-family:monospace;font-size:13px;">{{ transf.destiny_wallet or '—' }}</p>
+                    </div>
+
+                    <div class="campo">
+                        <label>Valor</label>
+                        <p class="valor-destaque">
+                            R$ {{ "{:,.2f}".format(transf.valor / 100).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                        </p>
+                    </div>
+
+                    <div class="campo">
+                        <label>Data / Hora</label>
+                        <p>{{ transf.dia }}</p>
+                    </div>
+
+                    <div class="campo full">
+                        <label>Descrição</label>
+                        <p>{{ transf.descr or 'Sem descrição.' }}</p>
+                    </div>
+
                 </div>
 
-                <div class="campo">
-                    <label>Tipo</label>
-                    <p class="saida">Saída</p>
-                </div>
-
-                <div class="campo">
-                    <label>Valor</label>
-                    <p class="valor-destaque">R$ 350,00</p>
-                </div>
-
-                <div class="campo">
-                    <label>Banco Destino</label>
-                    <p>Banco XPTO</p>
-                </div>
-
-                <div class="campo">
-                    <label>Chave PIX</label>
-                    <p>maria@email.com</p>
-                </div>
-
-                <div class="campo">
-                    <label>Data/Hora</label>
-                    <p>01/03/2026 - 14:32</p>
-                </div>
-
-                <div class="campo">
-                    <label>IP da Operação</label>
-                    <p>192.168.0.25</p>
-                </div>
-
-                <div class="campo full">
-                    <label>Descrição</label>
-                    <p>Pagamento referente a serviço prestado.</p>
-                </div>
-
-            </div>
-
-            <!-- AÇÕES ADMIN -->
-            <div class="acoes-admin">
-
-                <button class="btn-aprovar">Aprovar</button>
-                <button class="btn-cancelar">Cancelar</button>
-                <button class="btn-reembolsar">Reembolsar</button>
 
             </div>
 
-        </section>
+            <div class="card log-auditoria">
+                <h3>📋 Histórico de Ações</h3>
+                <ul>
+                    <li>{{ transf.dia }} — Transferência criada pelo usuário</li>
+                    {% if transf.transfer_status == 'pending' %}
+                    <li>Status atual: Em análise</li>
+                    {% endif %}
+                </ul>
+            </div>
 
-        <!-- LOG DE AUDITORIA -->
-        <section class="card log-auditoria">
-            <h3>Histórico de Ações</h3>
-
-            <ul>
-                <li>01/03/2026 14:32 - Transferência criada</li>
-                <li>01/03/2026 14:35 - Em análise automática</li>
-            </ul>
-        </section>
-
+        </div>
     </main>
-
 </div>
 
 </body>

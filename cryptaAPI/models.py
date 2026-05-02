@@ -8,7 +8,7 @@ class Database:
         self.conn.row_factory = sqlite3.Row
         self.cur = self.conn.cursor()
 
-        self.cur.executescript(open('init_internal.sql', 'r').read())
+        self.cur.executescript(open('cryptaAPI/init_internal.sql', 'r').read())
 
         self.conn.execute('INSERT INTO cryptabank (account, is_settlement, currency) SELECT ?, 0, 0 WHERE NOT EXISTS (SELECT 1 FROM cryptabank WHERE account = ?);', (self.liquidity_id, self.liquidity_id))
         self.conn.commit()

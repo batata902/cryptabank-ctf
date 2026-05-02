@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Admins — Crypta Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <style>
+        .nivel-badge { font-size:11px; padding:3px 8px; border-radius:12px; font-weight:700; }
+        .nivel-admin { background:#dbeafe; color:#1d4ed8; }
+        .nivel-suporte { background:#f3f4f6; color:#6b7280; }
+        .admins-table { width:100%; border-collapse:collapse; margin-top:12px; }
+        .admins-table th { text-align:left; padding:10px 12px; font-size:12px; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); border-bottom:1px solid var(--border); }
+        .admins-table td { padding:12px; border-bottom:1px solid var(--border); font-size:14px; }
+        .admins-table tr:last-child td { border-bottom:none; }
+        .alert { padding:12px 16px; border-radius:8px; margin-bottom:16px; font-weight:600; }
+        .alert-success { background:#dcfce7; color:#166534; }
+        .alert-error { background:#fee2e2; color:#991b1b; }
+    </style>
+</head>
+<body>
+
+<div class="admin-layout">
+
+    {% set active = 'admins' %}
+    {% include 'admin/_sidebar.html' %}
+
+    <main class="main-content">
+
+        <div class="topbar">
+            <h1>Gerenciar Administradores</h1>
+            <a href="{{ url_for('homepage') }}">← Sair para o site</a>
+        </div>
+
+        <div class="page-body">
+
+            {% if sucesso %}
+            <div class="alert alert-success">✅ {{ sucesso }}</div>
+            {% endif %}
+            {% if erro %}
+            <div class="alert alert-error">❌ {{ erro }}</div>
+            {% endif %}
+
+            <!-- FORMULARIO DE CRIACAO -->
+            <form class="form-config" method="POST" action="{{ url_for('cria_adm') }}">
+
+                <div class="card">
+                    <div class="card-header"><h2>➕ Novo Administrador</h2></div>
+
+                    <label>Nome Completo <span style="color:var(--danger)">*</span></label>
+                    <input type="text" name="nome" placeholder="Nome do administrador" required>
+
+                    <label>Email <span style="color:var(--danger)">*</span></label>
+                    <input type="email" name="email" placeholder="email@exemplo.com" required>
+
+                    <label>Senha <span style="color:var(--danger)">*</span></label>
+                    <input type="password" name="senha" placeholder="Mínimo 6 caracteres" minlength="6" required>
+
+                    <label>Confirmar Senha <span style="color:var(--danger)">*</span></label>
+                    <input type="password" name="confirmar_senha" placeholder="Repita a senha" required>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><h2>🛡 Nível de Acesso</h2></div>
+
+                    <label>Tipo de Administrador</label>
+                    <select name="nivel">
+                        <option value="suporte">Suporte — apenas painel de suporte</option>
+                        <option value="admin">Admin — acesso completo</option>
+                    </select>
+                    <p style="font-size:12px;color:var(--muted);margin-top:6px;">
+                        <strong>Suporte:</strong> pode apenas ver e responder chamados de suporte.<br>
+                        <strong>Admin:</strong> acesso total ao painel, usuários, transferências e configurações.
+                    </p>
+                </div>
+
+                <div>
+                    <button type="submit" class="btn btn-primary btn-salvar">➕ Criar Administrador</button>
+                </div>
+
+            </form>
+
+            <!-- LISTA DE ADMINS EXISTENTES -->
+            <div class="card">
+                <div class="card-header"><h2>👥 Administradores Cadastrados</h2></div>
+                <table class="admins-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Nível</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for adm in admins %}
+                        <tr>
+                            <td>{{ adm.id }}</td>
+                            <td><strong>{{ adm.nome or '—' }}</strong></td>
+                            <td>{{ adm.email }}</td>
+                            <td>
+                                {% if adm.nivel == 1 %}
+                                    <span class="nivel-badge nivel-admin">🔑 Admin</span>
+                                {% else %}
+                                    <span class="nivel-badge nivel-suporte">🎧 Suporte</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr><td colspan="4" style="text-align:center;color:var(--muted);padding:24px;">Nenhum administrador encontrado.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+
+</div>
+
+</body>
+</html>

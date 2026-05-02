@@ -1,102 +1,108 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
-    <title>Painel Admin - Crypta Bank</title>
+    <title>Dashboard Admin — Crypta Bank</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 </head>
-
 <body>
 
-    <div class="admin-layout">
+<div class="admin-layout">
 
-        <!-- MENU LATERAL -->
-        <aside class="sidebar">
-            <h2>Admin</h2>
-            <nav>
-                <a href="{{ url_for('admin') }}">📊 Dashboard</a>
-                <a href="#">👥 Usuários</a>
-                <a href="{{ url_for('admin_transf') }}">💸 Transferências</a>
-                <a href="{{ url_for('suporte') }}">🎧 Suporte</a>
-                <a href="#">🏦 Carteiras</a>
-                <a href="{{ url_for('admin_config') }}">⚙ Configurações</a>
-            </nav>
-        </aside>
+    {% set active = 'dashboard' %}
+    {% include 'admin/_sidebar.html' %}
 
-        <!-- CONTEÚDO -->
-        <main class="main-content">
+    <main class="main-content">
 
-            <header class="topbar">
-                <h1>Painel Administrativo</h1>
-                <a href="index.html">Sair</a>
-            </header>
+        <div class="topbar">
+            <h1>Painel Administrativo</h1>
+            <a href="{{ url_for('homepage') }}">← Sair para o site</a>
+        </div>
 
-            <!-- RESUMO -->
-            <section class="cards-resumo">
+        <div class="page-body">
 
-                <div class="card">
+            <div class="cards-resumo">
+
+                <div class="stat-card">
                     <h3>Total de Usuários</h3>
-                    <p>{{ "{:,}".format(infos.num_users).replace(",", ".") }}</p>
+                    <div class="value">{{ "{:,}".format(infos.num_users).replace(",", ".") }}</div>
                 </div>
 
-                <div class="card">
+                <div class="stat-card info">
                     <h3>Total em Contas</h3>
-                    <p>R$ {{ "{:,.2f}".format(infos.total).replace(",", "X").replace(".", ",").replace("X", ".") }}</p>
+                    <div class="value">
+                        R$ {{ "{:,.2f}".format(infos.total / 100 if infos.total else 0).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                    </div>
                 </div>
 
-                <div class="card">
+                <div class="stat-card warn">
                     <h3>Chamados Abertos</h3>
-                    <p>{{ num_chamados }}</p>
+                    <div class="value">{{ num_chamados }}</div>
                 </div>
 
-            </section>
+            </div>
 
-            <!-- LISTA DE USUÁRIOS -->
-            <section class="usuarios-section">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Usuários Cadastrados</h2>
+                    <input type="text" id="busca" class="search-bar" placeholder="🔍 Buscar usuário…" onkeyup="filtrarTabela()">
+                </div>
 
-                <h2>Usuários</h2>
-
-                <input type="text" placeholder="Buscar usuário..." class="buscar">
-
-                <table>
+                <table id="tabela-users">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>#</th>
                             <th>Nome</th>
                             <th>Email</th>
+                            <th>Cadastro</th>
+                            <th>Status</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-
-                        <!-- EXEMPLO -->
                         {% for u in users %}
                         <tr>
                             <td>{{ u.id }}</td>
-                            <td>{{ u.nome }}</td>
+                            <td><strong>{{ u.nome }}</strong></td>
                             <td>{{ u.email }}</td>
+                            <td>{{ u.created_at or '—' }}</td>
                             <td>
-                                <button onclick="verConta({{ u.id }})">Ver Conta</button>
+                                {% if u.get('bloqueado') %}
+                                    <span class="badge danger">🚫 Bloqueada</span>
+                                {% else %}
+                                    <span class="badge success">✅ Ativa</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button class="btn btn-info btn-sm" onclick="verConta({{ u.id }})">Ver conta</button>
                             </td>
                         </tr>
+                        {% else %}
+                        <tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px;">Nenhum usuário encontrado.</td></tr>
                         {% endfor %}
-
                     </tbody>
                 </table>
+            </div>
 
-            </section>
+        </div>
+    </main>
 
-        </main>
+</div>
 
-    </div>
+<script>
+function verConta(id) {
+    window.location.href = "{{ url_for('detailed_account') }}?id=" + id;
+}
 
-    <script>
-        function verConta(id) {
-            window.location.href = "{{ url_for('detailed_account') }}?id=" + id;
-        }
-    </script>
+function filtrarTabela() {
+    const termo = document.getElementById('busca').value.toLowerCase();
+    const rows = document.querySelectorAll('#tabela-users tbody tr');
+    rows.forEach(row => {
+        const texto = row.textContent.toLowerCase();
+        row.style.display = texto.includes(termo) ? '' : 'none';
+    });
+}
+</script>
 
 </body>
-
 </html>

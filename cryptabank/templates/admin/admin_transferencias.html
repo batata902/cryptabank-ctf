@@ -2,96 +2,104 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Transferências - Admin | Crypta Bank</title>
+    <title>Transferências — Admin | Crypta Bank</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
 </head>
 <body>
 
 <div class="admin-layout">
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <h2>Admin</h2>
-        <nav>
-            <a href="{{ url_for('admin') }}">📊 Dashboard</a>
-            <a href="#">👥 Usuários</a>
-            <a href="{{ url_for('admin_transf') }}">💸 Transferências</a>
-            <a href="{{ url_for('suporte') }}">🎧 Suporte</a>
-            <a href="#">🏦 Carteiras</a>
-            <a href="{{ url_for('admin_config') }}">⚙ Configurações</a>
-        </nav>
-    </aside>
+    {% set active = 'transf' %}
+    {% include 'admin/_sidebar.html' %}
 
-    <!-- CONTEÚDO -->
     <main class="main-content">
 
-        <header class="topbar">
+        <div class="topbar">
             <h1>Gerenciar Transferências</h1>
-            <a href="{{ url_for('homepage') }}">Sair</a>
-        </header>
+            <a href="{{ url_for('homepage') }}">← Sair para o site</a>
+        </div>
 
-        <!-- FILTROS -->
-        <section class="filtros">
+        <div class="page-body">
 
-            <input type="text" placeholder="Buscar por ID ou usuário...">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Histórico de Transferências</h2>
+                </div>
 
-            <select>
-                <option value="">Todos os Status</option>
-                <option value="concluida">Concluída</option>
-                <option value="pendente">Pendente</option>
-                <option value="cancelada">Cancelada</option>
-            </select>
+                <div class="filtros">
+                    <input type="text" id="busca" placeholder="🔍 Buscar por ID ou carteira…" onkeyup="filtrar()">
+                    <select id="filtro-status" onchange="filtrar()">
+                        <option value="">Todos os status</option>
+                        <option value="pending">Pendente</option>
+                        <option value="concluida">Concluída</option>
+                        <option value="cancelada">Cancelada</option>
+                    </select>
+                </div>
 
-            <select>
-                <option value="">Tipo</option>
-                <option value="entrada">Entrada</option>
-                <option value="saida">Saída</option>
-            </select>
-
-            <button>Filtrar</button>
-
-        </section>
-
-        <!-- TABELA -->
-        <section class="tabela-transferencias">
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Usuário</th>
-                        <th>Tipo</th>
-                        <th>Valor</th>
-                        <th>Status</th>
-                        <th>Data</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    {% for t in transfs %}
+                <table id="tabela-transfs">
+                    <thead>
                         <tr>
-                            <td>{{ t.id }}</td>
-                            <td>{{ t.source_wallet }}</td>
-                            <td class="entrada">Entrada</td>
-                            <td>R$ {{ "%.2f"|format((t.valor|int / 100)|float)|replace('.', ',') }}</td>
-                            <td class="status concluida">Concluída</td>
+                            <th>#</th>
+                            <th>Origem</th>
+                            <th>Destino</th>
+                            <th>Valor</th>
+                            <th>Status</th>
+                            <th>Data</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in transfs %}
+                        <tr data-status="{{ t.transfer_status }}">
+                            <td>#{{ t.id }}</td>
+                            <td style="font-family:monospace;font-size:12px;">{{ t.source_wallet[:16] }}…</td>
+                            <td style="font-family:monospace;font-size:12px;">{{ t.destiny_wallet[:16] if t.destiny_wallet else '—' }}…</td>
+                            <td><strong>R$ {{ "%.2f"|format((t.valor|int / 100)|float)|replace('.', ',') }}</strong></td>
+                            <td>
+                                {% if t.transfer_status == 'pending' %}
+                                    <span class="badge pending">Pendente</span>
+                                {% elif t.transfer_status == 'concluida' %}
+                                    <span class="badge success">Concluída</span>
+                                {% elif t.transfer_status == 'cancelada' %}
+                                    <span class="badge danger">Cancelada</span>
+                                {% else %}
+                                    <span class="badge info">{{ t.transfer_status }}</span>
+                                {% endif %}
+                            </td>
                             <td>{{ t.dia }}</td>
                             <td>
-                                <button class="btn-detalhe">Ver</button>
+                                <button class="btn btn-info" onclick="verDetalhe({{ t.id }})">Ver</button>
                             </td>
                         </tr>
-                    {% endfor %}
+                        {% else %}
+                        <tr><td colspan="7" style="text-align:center;color:var(--muted);padding:24px;">Nenhuma transferência encontrada.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
 
-                </tbody>
-            </table>
-
-        </section>
-
+            </div>
+        </div>
     </main>
-
 </div>
+
+<script>
+function verDetalhe(id) {
+    window.location.href = "{{ url_for('admin_transf_detalhe') }}?id=" + id;
+}
+
+function filtrar() {
+    const termo = document.getElementById('busca').value.toLowerCase();
+    const status = document.getElementById('filtro-status').value.toLowerCase();
+    const rows = document.querySelectorAll('#tabela-transfs tbody tr');
+    rows.forEach(row => {
+        const texto = row.textContent.toLowerCase();
+        const rowStatus = (row.dataset.status || '').toLowerCase();
+        const matchTermo = texto.includes(termo);
+        const matchStatus = !status || rowStatus.includes(status);
+        row.style.display = (matchTermo && matchStatus) ? '' : 'none';
+    });
+}
+</script>
 
 </body>
 </html>

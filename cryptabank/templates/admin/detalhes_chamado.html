@@ -1,111 +1,107 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
-    <title>Detalhe do Chamado - Crypta Bank</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/suporte_admin.css') }}">
+    <title>Detalhe do Chamado — Crypta Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    <style>
+        .campo { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+        .campo label { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing:.5px; color: var(--muted); }
+        .campo p, .campo .box {
+            background: var(--bg); padding: 12px; border-radius: 7px;
+            font-size: 14px; line-height: 1.6; word-break: break-word;
+        }
+        textarea { width: 100%; min-height: 120px; padding: 12px; border: 1px solid var(--border); border-radius: 7px; font-size: 14px; resize: vertical; }
+        select  { padding: 9px 12px; border: 1px solid var(--border); border-radius: 7px; font-size: 14px; }
+        .alert-sucesso { background: #dcfce7; color: #166534; padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-weight: 600; }
+    </style>
 </head>
-
 <body>
 
-    <header class="header-admin">
-        <h1>Crypta Bank - Painel de Suporte</h1>
-        <div class="admin-info">
-            <span>Suporte</span>
-            <a href="{{ url_for('homepage') }}">Sair</a>
+<div class="admin-layout">
+
+    {% set active = 'suporte' %}
+    {% include 'admin/_sidebar.html' %}
+
+    <main class="main-content">
+
+        <div class="topbar">
+            <h1>Detalhe do Chamado #{{ chamado.id }}</h1>
+            <a href="{{ url_for('suporte') }}">← Voltar</a>
         </div>
-    </header>
 
-    <main class="container-admin">
+        <div class="page-body">
 
-        <section class="card-admin">
+            {% if request.args.get('salvo') %}
+            <div class="alert-sucesso">✅ Resposta salva com sucesso!</div>
+            {% endif %}
 
-            <h2>Detalhes do Chamado</h2>
-
-            <div class="detalhe-chamado">
+            <div class="card">
+                <div class="card-header"><h2>📋 Informações do Chamado</h2></div>
 
                 <div class="campo">
-                    <label>Cliente</label>
-                    <p id="cliente"> {{ chamado.email }} </p>
+                    <label>Cliente (e-mail)</label>
+                    <p>{{ chamado.email }}</p>
                 </div>
 
                 <div class="campo">
-                    <label>Tipo de Problema</label>
-                    <p id="assunto"> {{ chamado.categoria }} </p>
+                    <label>Categoria</label>
+                    <p>{{ chamado.categoria }}</p>
                 </div>
 
                 <div class="campo">
                     <label>Assunto</label>
-                    <p id="assunto"> {{ chamado.problema }} </p>
+                    <p>{{ chamado.assunto }}</p>
                 </div>
 
                 <div class="campo">
-                    <label>Data</label>
-                    <p id="data"> {{ chamado.enviado_em }} </p>
+                    <label>Data de abertura</label>
+                    <p>{{ chamado.enviado_em }}</p>
                 </div>
 
                 <div class="campo">
-                    <label>Status</label>
-                    <select id="status">
-                        <option value="aberto">Aberto</option>
-                        <option value="andamento">Em andamento</option>
-                        <option value="resolvido">Resolvido</option>
-                    </select>
+                    <label>Mensagem do cliente</label>
+                    <div class="box">{{ chamado.problema }}</div>
                 </div>
 
+                {% if chamado.get('resposta') %}
                 <div class="campo">
-                    <label>Mensagem do Cliente</label>
-                    <div class="mensagem-cliente" id="mensagem">
-                        {{ chamado.problema }}
-                    </div>
+                    <label>Última Resposta Enviada</label>
+                    <div class="box" style="border-left: 3px solid var(--accent);">{{ chamado.resposta }}</div>
                 </div>
-
-                <div class="campo">
-                    <label>Resposta do Suporte</label>
-                    <textarea id="resposta" placeholder="Digite a resposta para o cliente..."></textarea>
-                </div>
-
-                <div class="acoes">
-                    <button onclick="salvarResposta()">Salvar Resposta</button>
-                    <button onclick="voltar()">Voltar</button>
-                </div>
-
+                {% endif %}
             </div>
 
-        </section>
+            <div class="card">
+                <div class="card-header"><h2>💬 Responder Chamado</h2></div>
 
+                <form method="POST" action="{{ url_for('responder_chamado') }}">
+                    <input type="hidden" name="id" value="{{ chamado.id }}">
+
+                    <div class="campo">
+                        <label>Status do chamado</label>
+                        <select name="status">
+                            <option value="aberto"    {% if chamado.get('status','aberto')=='aberto'    %}selected{% endif %}>Aberto</option>
+                            <option value="andamento" {% if chamado.get('status')=='andamento' %}selected{% endif %}>Em andamento</option>
+                            <option value="resolvido" {% if chamado.get('status')=='resolvido' %}selected{% endif %}>Resolvido</option>
+                        </select>
+                    </div>
+
+                    <div class="campo">
+                        <label>Resposta ao cliente</label>
+                        <textarea name="resposta" placeholder="Digite a resposta para o cliente…">{{ chamado.get('resposta','') }}</textarea>
+                    </div>
+
+                    <div class="acoes">
+                        <button type="submit" class="btn btn-success">💾 Salvar Resposta</button>
+                        <a href="{{ url_for('suporte') }}" class="btn btn-secondary">← Voltar</a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
     </main>
-
-    <footer class="footer">
-        <p>© 2026 Crypta Bank - Todos os direitos reservados</p>
-    </footer>
-
-    <script>
-
-        function voltar() {
-            window.location.href = "{{ url_for('suporte') }}";
-        }
-
-        function salvarResposta() {
-            const resposta = document.getElementById("resposta").value;
-            const status = document.getElementById("status").value;
-
-            alert("Resposta salva!\nStatus: " + status + "\nResposta: " + resposta);
-
-            // Aqui você pode integrar com backend futuramente
-        }
-
-        // pegar ID do chamado pela URL
-        const params = new URLSearchParams(window.location.search);
-        const chamadoId = params.get("id");
-
-        console.log("Chamado ID:", chamadoId);
-
-        // futuramente usar esse ID para buscar os dados no backend
-
-    </script>
+</div>
 
 </body>
-
 </html>

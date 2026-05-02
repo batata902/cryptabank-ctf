@@ -5,6 +5,138 @@
     <meta charset="UTF-8">
     <title>Suporte - Crypta Bank</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        /* ABAS */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .tab-btn {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            background: var(--cor2);
+            color: #aaa;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: #23c6a8;
+            border-bottom-color: #23c6a8;
+            background: var(--cor1);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* LISTA DE CHAMADOS */
+        .chamado-card {
+            background: var(--cor2);
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin-bottom: 14px;
+            border-left: 5px solid #555;
+            transition: 0.15s;
+        }
+
+        .chamado-card.aberto    { border-left-color: #e53935; }
+        .chamado-card.andamento { border-left-color: #f59e0b; }
+        .chamado-card.resolvido { border-left-color: #23c6a8; }
+
+        .chamado-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .chamado-assunto {
+            font-weight: bold;
+            font-size: 15px;
+            color: white;
+        }
+
+        .chamado-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: #aaa;
+            flex-wrap: wrap;
+        }
+
+        .status-pill {
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        .status-pill.aberto    { background: #fee2e2; color: #991b1b; }
+        .status-pill.andamento { background: #fef3c7; color: #92400e; }
+        .status-pill.resolvido { background: #d1fae5; color: #065f46; }
+
+        .chamado-problema {
+            font-size: 13px;
+            color: #ccc;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        /* RESPOSTA DO SUPORTE */
+        .resposta-box {
+            margin-top: 12px;
+            background: rgba(35, 198, 168, 0.08);
+            border: 1px solid rgba(35, 198, 168, 0.25);
+            border-radius: 8px;
+            padding: 14px 16px;
+        }
+
+        .resposta-label {
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: #23c6a8;
+            margin-bottom: 6px;
+        }
+
+        .resposta-texto {
+            font-size: 13px;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .aguardando-box {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #888;
+            font-style: italic;
+        }
+
+        .sem-chamados {
+            text-align: center;
+            color: #666;
+            padding: 40px 0;
+            font-size: 14px;
+        }
+
+        /* CONTATO EXTRA */
+        .contato p {
+            margin-bottom: 8px;
+            color: #ccc;
+        }
+    </style>
 </head>
 
 <body>
@@ -18,47 +150,129 @@
 
     <main class="container">
 
-        <section class="card">
-            <h2>Central de Suporte</h2>
+        <!-- ABAS -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="trocarAba('abrir', this)">📝 Abrir Chamado</button>
+            <button class="tab-btn" onclick="trocarAba('meus', this)">
+                📋 Meus Chamados
+                {% if chamados %}<span style="background:#23c6a8;color:#000;border-radius:12px;padding:1px 7px;font-size:11px;margin-left:4px;">{{ chamados|length }}</span>{% endif %}
+            </button>
+        </div>
 
-            <form action="{{ url_for('enviar_suporte') }}" method="POST">
-                <label>Assunto</label>
-                <input type="text" placeholder="Ex: Problema com transferência" name="titulo">
+        <!-- ABA: ABRIR CHAMADO -->
+        <div id="aba-abrir" class="tab-content active">
 
-                <label>Categoria</label>
-                <select name="cat">
-                    <option value="duvida">Dúvida</option>
-                    <option value="problema-tec">Problema técnico</option>
-                    <option value="pagamento">Pagamento</option>
-                    <option value="sec">Segurança</option>
-                    <option value="outro">Outro</option>
-                </select>
+            <section class="card">
+                <h2>Nova Solicitação</h2>
 
-                <label>Descreva o problema</label>
-                <textarea placeholder="Explique o que aconteceu..." name="problema"></textarea>
+                <form action="{{ url_for('enviar_suporte') }}" method="POST">
+                    <label>Assunto</label>
+                    <input type="text" placeholder="Ex: Problema com transferência" name="titulo" required>
 
-                <button type="submit" class="btn-primary">Enviar Solicitação</button>
-            </form>
-        </section>
+                    <label>Categoria</label>
+                    <select name="cat">
+                        <option value="duvida">Dúvida</option>
+                        <option value="problema-tec">Problema técnico</option>
+                        <option value="pagamento">Pagamento</option>
+                        <option value="sec">Segurança</option>
+                        <option value="outro">Outro</option>
+                    </select>
 
-        <section class="card contato">
-            <h3>Outros Canais</h3>
-            <p>📞 Telefone: 0800 123 4567</p>
-            <p>💬 Chat 24h no aplicativo</p>
-            <p>📧 Email: suporte@cryptabank.com</p>
-        </section>
+                    <label>Descreva o problema</label>
+                    <textarea placeholder="Explique o que aconteceu..." name="problema" required></textarea>
+
+                    <button type="submit" class="btn-primary">Enviar Solicitação</button>
+                </form>
+            </section>
+
+            <section class="card contato">
+                <h3>Outros Canais</h3>
+                <p>📞 Telefone: 0800 123 4567</p>
+                <p>💬 Chat 24h no aplicativo</p>
+                <p>📧 Email: suporte@cryptabank.com</p>
+            </section>
+
+        </div>
+
+        <!-- ABA: MEUS CHAMADOS -->
+        <div id="aba-meus" class="tab-content">
+
+            {% if chamados %}
+                {% for c in chamados %}
+                {% set st = c.get('status', 'aberto') %}
+                <div class="chamado-card {{ st }}">
+
+                    <div class="chamado-header">
+                        <span class="chamado-assunto">{{ c.assunto }}</span>
+                        <div class="chamado-meta">
+                            <span>{{ c.enviado_em }}</span>
+                            <span class="status-pill {{ st }}">
+                                {% if st == 'aberto' %}Aberto
+                                {% elif st == 'andamento' %}Em andamento
+                                {% else %}Resolvido{% endif %}
+                            </span>
+                            <span style="color:#888;font-size:11px;">{{ c.categoria }}</span>
+                        </div>
+                    </div>
+
+                    <p class="chamado-problema">{{ c.problema }}</p>
+
+                    {% if c.get('resposta') %}
+                    <div class="resposta-box">
+                        <div class="resposta-label">💬 Resposta do Suporte</div>
+                        <div class="resposta-texto">{{ c.resposta }}</div>
+                    </div>
+                    {% else %}
+                    <div class="aguardando-box">⏳ Aguardando resposta da equipe de suporte…</div>
+                    {% endif %}
+
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="card">
+                    <div class="sem-chamados">
+                        <div style="font-size:40px;margin-bottom:12px;">📭</div>
+                        <p>Você ainda não abriu nenhum chamado.</p>
+                        <p style="margin-top:6px;font-size:12px;">Use a aba <strong>Abrir Chamado</strong> para entrar em contato com o suporte.</p>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
 
     </main>
 
     <script>
-        const aviso = document.querySelector('#aviso')
-        function mostrar () {
-            aviso.classList.add('mostrar')
-
-            setTimeout( () => {aviso.classList.remove('mostrar')}, 3000);
+        // Aviso flash
+        const aviso = document.querySelector('#aviso');
+        function mostrar() {
+            aviso.classList.add('mostrar');
+            setTimeout(() => aviso.classList.remove('mostrar'), 3000);
         }
-        if (aviso.textContent !== 'None') {
-            window.onload = () => mostrar()
+        if (aviso.textContent.trim() && aviso.textContent.trim() !== 'None') {
+            window.onload = () => {
+                mostrar();
+                // Se veio aviso de envio, vai para aba "Meus Chamados"
+                trocarAbaByName('meus');
+            };
+        }
+
+        // Lógica de abas
+        function trocarAba(nome, btn) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById('aba-' + nome).classList.add('active');
+            btn.classList.add('active');
+        }
+
+        function trocarAbaByName(nome) {
+            const btn = document.querySelector(`.tab-btn:nth-child(${nome === 'abrir' ? 1 : 2})`);
+            trocarAba(nome, btn);
+        }
+
+        // Se há param ?aba=meus na URL, abre direto em Meus Chamados
+        if (new URLSearchParams(window.location.search).get('aba') === 'meus') {
+            trocarAbaByName('meus');
         }
     </script>
     <script src="{{ url_for('static', filename='index.js') }}"></script>

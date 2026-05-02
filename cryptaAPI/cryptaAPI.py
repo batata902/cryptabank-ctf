@@ -68,6 +68,12 @@ def total_em_contas():
     total = database.get_total_currrency()
     return jsonify(total)
 
+@app.route('/api/frozen', methods=["POST"])
+def frozen():
+    user_id = request.get_json()['id']
+
+    database.froz
+
 # DEV
 
 

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes da Conta — Crypta Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+
+<div class="admin-layout">
+
+    {% set active = 'dashboard' %}
+    {% include 'admin/_sidebar.html' %}
+
+    <main class="main-content">
+
+        <div class="topbar">
+            <h1>Detalhes da Conta</h1>
+            <a href="{{ url_for('admin') }}">← Voltar</a>
+        </div>
+
+        <div class="page-body">
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>👤 Informações do Usuário</h2>
+                    {% if usuario.get('bloqueado') %}
+                        <span class="badge danger">🚫 Conta Bloqueada</span>
+                    {% else %}
+                        <span class="badge success">✅ Conta Ativa</span>
+                    {% endif %}
+                </div>
+
+                <div class="info-box">
+
+                    <div class="info-item">
+                        <strong>ID do Usuário</strong>
+                        <p>#{{ usuario.id }}</p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Nome</strong>
+                        <p>{{ usuario.nome }}</p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong>CPF</strong>
+                        <p>{{ usuario.cpf }}</p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Email</strong>
+                        <p>{{ usuario.email }}</p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Conta criada em</strong>
+                        <p>{{ usuario.created_at or '—' }}</p>
+                    </div>
+
+                    <div class="info-item">
+                        <strong>Saldo Atual</strong>
+                        <p style="color:var(--accent);font-size:18px;">
+                            R$ {{ "{:,.2f}".format(usuario.saldo).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                        </p>
+                    </div>
+
+                    <div class="info-item" style="grid-column: 1 / -1;">
+                        <strong>Chave de Transferência</strong>
+                        <div class="copy-field" style="margin-top:4px;">
+                            <span id="contaId" style="font-family:monospace;font-size:14px;">{{ usuario.conta_id }}</span>
+                            <button class="copy-btn" onclick="copiarConta()">📋</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ACOES ADMIN -->
+            <div class="card">
+                <div class="card-header"><h2>⚡ Ações Administrativas</h2></div>
+                <div class="acoes">
+                    {% if not usuario.get('bloqueado') %}
+                    <button class="btn btn-danger" onclick="bloquearUsuario({{ usuario.id }})">
+                        🚫 Congelar Conta
+                    </button>
+                    {% else %}
+                    <button class="btn btn-success" onclick="desbloquearUsuario({{ usuario.id }})">
+                        ✅ Desbloquear Conta
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<script>
+function copiarConta() {
+    const conta = document.getElementById("contaId").textContent.trim();
+    const btn = document.querySelector(".copy-btn");
+    navigator.clipboard.writeText(conta);
+    btn.textContent = "✅";
+    setTimeout(() => btn.textContent = "📋", 1500);
+}
+
+function bloquearUsuario(id) {
+    if (confirm("Deseja CONGELAR esta conta? O usuário não poderá mais fazer login ou transferências.")) {
+        window.location.href = "{{ url_for('bloquear_conta') }}?id=" + id;
+    }
+}
+
+function desbloquearUsuario(id) {
+    if (confirm("Deseja DESBLOQUEAR esta conta? O usuário voltará a ter acesso normal.")) {
+        window.location.href = "{{ url_for('desbloquear_conta') }}?id=" + id;
+    }
+}
+</script>
+
+</body>
+</html>
